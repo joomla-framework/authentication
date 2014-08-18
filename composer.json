@@ -15,8 +15,12 @@
     },
     "autoload": {
     	"psr-4": {
-    		"Joomla\\Authentication\\": "src/",
-            "Joomla\\Authentication\\Tests\\": "Tests/"
+    		"Joomla\\Authentication\\": "src/"
     	}
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Joomla\\Authentication\\Tests\\": "Tests/"
+        }
     }
 }

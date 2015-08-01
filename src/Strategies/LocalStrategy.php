@@ -3,7 +3,7 @@
  * Part of the Joomla Framework Authentication Package
  *
  * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @license    GNU Lesser General Public License version 2.1 or later; see LICENSE
  */
 
 namespace Joomla\Authentication\Strategies;

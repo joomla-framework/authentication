@@ -2,13 +2,13 @@
 /**
  * Part of the Joomla Framework Authentication Package
  *
- * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Authentication\Strategies;
 
-use Joomla\Authentication\AuthenticationStrategyInterface;
+use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Input\Input;
 
@@ -17,16 +17,8 @@ use Joomla\Input\Input;
  *
  * @since  1.0
  */
-class LocalStrategy implements AuthenticationStrategyInterface
+class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
-	/**
-	 * The Input object
-	 *
-	 * @var    Input
-	 * @since  1.0
-	 */
-	private $input;
-
 	/**
 	 * The credential store.
 	 *
@@ -36,12 +28,12 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	private $credentialStore;
 
 	/**
-	 * The last authentication status.
+	 * The Input object
 	 *
-	 * @var    integer
+	 * @var    Input
 	 * @since  1.0
 	 */
-	private $status;
+	private $input;
 
 	/**
 	 * Strategy Constructor
@@ -66,8 +58,8 @@ class LocalStrategy implements AuthenticationStrategyInterface
 	 */
 	public function authenticate()
 	{
-		$username = $this->input->get('username', false);
-		$password = $this->input->get('password', false);
+		$username = $this->input->get('username', false, 'username');
+		$password = $this->input->get('password', false, 'raw');
 
 		if (!$username || !$password)
 		{
@@ -76,40 +68,25 @@ class LocalStrategy implements AuthenticationStrategyInterface
 			return false;
 		}
 
-		if (isset($this->credentialStore[$username]))
-		{
-			$hash = $this->credentialStore[$username];
-		}
-		else
-		{
-			$this->status = Authentication::NO_SUCH_USER;
-
-			return false;
-		}
-
-		if (password_verify($password, $hash))
-		{
-			$this->status = Authentication::SUCCESS;
-
-			return $username;
-		}
-		else
-		{
-			$this->status = Authentication::INVALID_CREDENTIALS;
-
-			return false;
-		}
+		return $this->doAuthenticate($username, $password);
 	}
 
 	/**
-	 * Get the status of the last authentication attempt.
+	 * Retrieve the hashed password for the specified user.
 	 *
-	 * @return  integer  Authentication class constant result.
+	 * @param   string  $username  Username to lookup.
 	 *
-	 * @since   1.0
+	 * @return  string|boolean  Hashed password on success or boolean false on failure.
+	 *
+	 * @since   1.1.0
 	 */
-	public function getResult()
+	protected function getHashedPassword($username)
 	{
-		return $this->status;
+		if (!isset($this->credentialStore[$username]))
+		{
+			return false;
+		}
+
+		return $this->credentialStore[$username];
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Part of the Joomla Framework Authentication Package
  *
- * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -93,28 +93,34 @@ class Authentication
 	 */
 	public function authenticate($strategies = array())
 	{
+		$strategyObjects = array();
+
 		if (empty($strategies))
 		{
 			$strategyObjects = $this->strategies;
 		}
 		else
 		{
-			$strategies = (array) $strategies;
+			$strategies      = (array) $strategies;
+			$strategyObjects = array();
 
-			foreach ($strategies AS $strategy)
+			foreach ($strategies as $strategy)
 			{
-				if (isset($this->strategies[$strategy]))
-				{
-					$strategyObjects[$strategy] = $this->strategies[$strategy];
-				}
-				else
+				if (!isset($this->strategies[$strategy]))
 				{
 					throw new \RuntimeException('Authentication Strategy Not Found');
 				}
+
+				$strategyObjects[$strategy] = $this->strategies[$strategy];
 			}
 		}
 
-		foreach ($strategyObjects AS $strategy => $strategyObject)
+		if (empty($strategyObjects))
+		{
+			throw new \RuntimeException('No strategies have been set');
+		}
+
+		foreach ($strategyObjects as $strategy => $strategyObject)
 		{
 			$username = $strategyObject->authenticate();
 

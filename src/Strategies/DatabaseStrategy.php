@@ -10,7 +10,7 @@ namespace Joomla\Authentication\Strategies;
 
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
-use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Input\Input;
 
 /**
@@ -21,9 +21,9 @@ use Joomla\Input\Input;
 class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 {
 	/**
-	 * DatabaseDriver object
+	 * DatabaseInterface object
 	 *
-	 * @var    DatabaseDriver
+	 * @var    DatabaseInterface
 	 * @since  1.1.0
 	 */
 	private $db;
@@ -47,13 +47,13 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	/**
 	 * Strategy Constructor
 	 *
-	 * @param   Input           $input     The input object from which to retrieve the request credentials.
-	 * @param   DatabaseDriver  $database  DatabaseDriver for retrieving user credentials.
-	 * @param   array           $options   Optional options array for configuring the credential storage connection.
+	 * @param   Input              $input     The input object from which to retrieve the request credentials.
+	 * @param   DatabaseInterface  $database  DatabaseInterface for retrieving user credentials.
+	 * @param   array              $options   Optional options array for configuring the credential storage connection.
 	 *
 	 * @since   1.1.0
 	 */
-	public function __construct(Input $input, DatabaseDriver $database, array $options = array())
+	public function __construct(Input $input, DatabaseInterface $database, array $options = array())
 	{
 		$this->input = $input;
 		$this->db    = $database;

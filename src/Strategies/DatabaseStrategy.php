@@ -98,12 +98,19 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	protected function getHashedPassword($username)
 	{
-		$password = $this->db->setQuery(
-			$this->db->getQuery(true)
-				->select($this->dbOptions['password_column'])
-				->from($this->dbOptions['database_table'])
-				->where($this->dbOptions['username_column'] . ' = ' . $this->db->quote($username))
-		)->loadResult();
+		try
+		{
+			$password = $this->db->setQuery(
+				$this->db->getQuery(true)
+					->select($this->dbOptions['password_column'])
+					->from($this->dbOptions['database_table'])
+					->where($this->dbOptions['username_column'] . ' = ' . $this->db->quote($username))
+			)->loadResult();
+		}
+		catch (\RuntimeException $exception)
+		{
+			return false;
+		}
 
 		if (!$password)
 		{

@@ -43,10 +43,10 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Input $input, $credentialStore)
+	public function __construct(Input $input, array $credentialStore = [])
 	{
-		$this->input = $input;
 		$this->credentialStore = $credentialStore;
+		$this->input           = $input;
 	}
 
 	/**
@@ -82,11 +82,6 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	protected function getHashedPassword($username)
 	{
-		if (!isset($this->credentialStore[$username]))
-		{
-			return false;
-		}
-
-		return $this->credentialStore[$username];
+		return isset($this->credentialStore[$username]) ? $this->credentialStore[$username] : false;
 	}
 }

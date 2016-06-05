@@ -56,7 +56,7 @@ class Authentication
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $strategies = array();
+	private $strategies = [];
 
 	/**
 	 * The array of results.
@@ -64,7 +64,7 @@ class Authentication
 	 * @var    array
 	 * @since  1.0
 	 */
-	private $results = array();
+	private $results = [];
 
 	/**
 	 * Register a new strategy
@@ -91,9 +91,9 @@ class Authentication
 	 * @since   1.0
 	 * @throws  \RuntimeException
 	 */
-	public function authenticate($strategies = array())
+	public function authenticate(array $strategies = [])
 	{
-		$strategyObjects = array();
+		$strategyObjects = [];
 
 		if (empty($strategies))
 		{
@@ -102,7 +102,6 @@ class Authentication
 		else
 		{
 			$strategies      = (array) $strategies;
-			$strategyObjects = array();
 
 			foreach ($strategies as $strategy)
 			{

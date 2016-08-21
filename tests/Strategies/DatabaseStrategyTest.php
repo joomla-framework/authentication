@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright  Copyright (C) 2005 - 2014 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
@@ -40,7 +40,7 @@ class DatabaseStrategyTest extends TestDatabase
 	 */
 	protected function setUp()
 	{
-		$this->input = $this->getMock('Joomla\\Input\\Input');
+		$this->input = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
 	}
 
 	/**

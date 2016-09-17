@@ -17,6 +17,13 @@ use Joomla\Authentication\AuthenticationStrategyInterface;
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
 	/**
+	 * Object being tested
+	 *
+	 * @var  Authentication
+	 */
+	private $object;
+
+	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 *
 	 * @return  void
@@ -37,7 +44,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSingleStrategy()
 	{
-		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 
@@ -46,7 +53,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 			->with()
 			->will($this->returnValue(false));
 
-		$this->assertFalse($this->object->authenticate('mock'));
+		$this->assertFalse($this->object->authenticate(['mock']));
 	}
 
 	/**
@@ -58,7 +65,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSingleStrategyEmptyArray()
 	{
-		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 
@@ -79,9 +86,9 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testSomeStrategies()
 	{
-		$mockStrategy1 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
-		$mockStrategy2 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
-		$mockStrategy3 = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy1 = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
+		$mockStrategy2 = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
+		$mockStrategy3 = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
 
 		$this->object->addStrategy('mock1', $mockStrategy1);
 		$this->object->addStrategy('mock2', $mockStrategy2);
@@ -98,7 +105,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 		$mockStrategy3->expects($this->never())
 			->method('authenticate');
 
-		$this->assertEquals('jimbob', $this->object->authenticate(array('mock2', 'mock3')));
+		$this->assertEquals('jimbob', $this->object->authenticate(['mock2', 'mock3']));
 	}
 
 	/**
@@ -112,7 +119,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testStrategiesException()
 	{
-		$this->assertEquals(false, $this->object->authenticate('mock1'));
+		$this->object->authenticate(['mock1']);
 	}
 
 	/**
@@ -124,7 +131,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 	 */
 	public function testGetResults()
 	{
-		$mockStrategy = $this->getMockBuilder('Joomla\\Authentication\\AuthenticationStrategyInterface')->getMock();
+		$mockStrategy = $this->getMockBuilder(AuthenticationStrategyInterface::class)->getMock();
 
 		$this->object->addStrategy('mock', $mockStrategy);
 
@@ -141,7 +148,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 		$this->object->authenticate();
 
 		$this->assertEquals(
-			array('mock' => Authentication::SUCCESS),
+			['mock' => Authentication::SUCCESS],
 			$this->object->getResults()
 		);
 	}

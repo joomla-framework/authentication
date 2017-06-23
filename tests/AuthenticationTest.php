@@ -7,6 +7,7 @@
 namespace Joomla\Authentication\Tests;
 
 use Joomla\Authentication\Authentication;
+use Joomla\Authentication\AuthenticationStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -29,7 +29,7 @@ class DatabaseStrategyTest extends TestDatabase
 		$db->setQuery(
 			$db->getQuery(true)
 				->insert('#__users')
-				->columns(array('username', 'password'))
+				->columns(['username', 'password'])
 				->values($db->quote($username) . ',' . $db->quote($password))
 		)->execute();
 	}

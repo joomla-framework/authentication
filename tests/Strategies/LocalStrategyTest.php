@@ -32,9 +32,9 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
-		$credentialStore = array(
+		$credentialStore = [
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG'
-		);
+		];
 
 		$localStrategy = new LocalStrategy($this->input, $credentialStore);
 
@@ -52,9 +52,9 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
-		$credentialStore = array(
+		$credentialStore = [
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
-		);
+		];
 
 		$localStrategy = new LocalStrategy($this->input, $credentialStore);
 
@@ -72,9 +72,9 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturn(false);
 
-		$credentialStore = array(
+		$credentialStore = [
 			'username' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
-		);
+		];
 
 		$localStrategy = new LocalStrategy($this->input, $credentialStore);
 
@@ -92,9 +92,9 @@ class LocalStrategyTest extends TestCase
 			->method('get')
 			->willReturnArgument(0);
 
-		$credentialStore = array(
+		$credentialStore = [
 			'jimbob' => '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH'
-		);
+		];
 
 		$localStrategy = new LocalStrategy($this->input, $credentialStore);
 

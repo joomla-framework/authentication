@@ -99,7 +99,6 @@ class Authentication
 		}
 		else
 		{
-			$strategies      = (array) $strategies;
 			$strategyObjects = [];
 
 			foreach ($strategies as $strategy)

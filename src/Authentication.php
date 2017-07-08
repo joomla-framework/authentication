@@ -93,8 +93,6 @@ class Authentication
 	 */
 	public function authenticate(array $strategies = [])
 	{
-		$strategyObjects = [];
-
 		if (empty($strategies))
 		{
 			$strategyObjects = $this->strategies;
@@ -102,6 +100,7 @@ class Authentication
 		else
 		{
 			$strategies      = (array) $strategies;
+			$strategyObjects = [];
 
 			foreach ($strategies as $strategy)
 			{

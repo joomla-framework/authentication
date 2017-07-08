@@ -53,7 +53,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @since   1.1.0
 	 */
-	public function __construct(Input $input, DatabaseInterface $database, array $options = array())
+	public function __construct(Input $input, DatabaseInterface $database, array $options = [])
 	{
 		$this->input = $input;
 		$this->db    = $database;

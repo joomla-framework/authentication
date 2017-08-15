@@ -58,9 +58,9 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 		$this->input = $input;
 		$this->db    = $database;
 
-		$options['database_table']  = isset($options['database_table']) ? $options['database_table'] : '#__users';
-		$options['username_column'] = isset($options['username_column']) ? $options['username_column'] : 'username';
-		$options['password_column'] = isset($options['password_column']) ? $options['password_column'] : 'password';
+		$options['database_table']  = $options['database_table'] ?? '#__users';
+		$options['username_column'] = $options['username_column'] ?? 'username';
+		$options['password_column'] = $options['password_column'] ?? 'password';
 
 		$this->dbOptions = $options;
 	}

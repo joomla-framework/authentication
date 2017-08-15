@@ -82,6 +82,6 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	protected function getHashedPassword($username)
 	{
-		return isset($this->credentialStore[$username]) ? $this->credentialStore[$username] : false;
+		return $this->credentialStore[$username] ?? false;
 	}
 }

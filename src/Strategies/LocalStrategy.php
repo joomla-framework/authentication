@@ -10,6 +10,7 @@ namespace Joomla\Authentication\Strategies;
 
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
+use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Input\Input;
 
 /**
@@ -38,13 +39,16 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	/**
 	 * Strategy Constructor
 	 *
-	 * @param   Input  $input            The input object from which to retrieve the request credentials.
-	 * @param   array  $credentialStore  Hash of username and hash pairs.
+	 * @param   Input             $input            The input object from which to retrieve the request credentials.
+	 * @param   array             $credentialStore  Hash of username and hash pairs.
+	 * @param   HandlerInterface  $passwordHandler  The password handler.
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Input $input, array $credentialStore = [])
+	public function __construct(Input $input, array $credentialStore = [], HandlerInterface $passwordHandler = null)
 	{
+		parent::__construct($passwordHandler);
+
 		$this->credentialStore = $credentialStore;
 		$this->input           = $input;
 	}

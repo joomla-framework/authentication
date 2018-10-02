@@ -8,9 +8,9 @@
 
 namespace Joomla\Authentication\Strategies;
 
-use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
+use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Input\Input;
 

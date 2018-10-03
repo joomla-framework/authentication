@@ -26,7 +26,7 @@ class Argon2iHandler implements HandlerInterface
 	 * @since   1.2.0
 	 * @throws  \LogicException
 	 */
-	public function hashPassword($plaintext, array $options = array())
+	public function hashPassword($plaintext, array $options = [])
 	{
 		// Use the password extension if able
 		if (version_compare(PHP_VERSION, '7.2', '>=') && \defined('PASSWORD_ARGON2I'))

@@ -26,7 +26,7 @@ class Argon2idHandler implements HandlerInterface
 	 * @since   __DEPLOY_VERSION__
 	 * @throws  \LogicException
 	 */
-	public function hashPassword($plaintext, array $options = array())
+	public function hashPassword($plaintext, array $options = [])
 	{
 		// Use the password extension if able
 		if (version_compare(PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))

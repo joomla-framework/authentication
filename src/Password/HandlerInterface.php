@@ -25,7 +25,7 @@ interface HandlerInterface
 	 *
 	 * @since   1.2.0
 	 */
-	public function hashPassword($plaintext, array $options = array());
+	public function hashPassword($plaintext, array $options = []);
 
 	/**
 	 * Check that the password handler is supported in this environment

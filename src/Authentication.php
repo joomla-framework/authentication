@@ -20,35 +20,35 @@ class Authentication
 	 *
 	 * @since  1.0
 	 */
-	const SUCCESS = 1;
+	public const SUCCESS = 1;
 
 	/**
 	 * Credentials were provided but they were invalid.
 	 *
 	 * @since  1.0
 	 */
-	const INVALID_CREDENTIALS = 2;
+	public const INVALID_CREDENTIALS = 2;
 
 	/**
 	 * Credentials were provided but the user did not exist in the credential store.
 	 *
 	 * @since  1.0
 	 */
-	const NO_SUCH_USER = 3;
+	public const NO_SUCH_USER = 3;
 
 	/**
 	 * There were no credentials found.
 	 *
 	 * @since  1.0
 	 */
-	const NO_CREDENTIALS = 4;
+	public const NO_CREDENTIALS = 4;
 
 	/**
 	 * There were partial credentials found but they were not complete.
 	 *
 	 * @since  1.0
 	 */
-	const INCOMPLETE_CREDENTIALS = 5;
+	public const INCOMPLETE_CREDENTIALS = 5;
 
 	/**
 	 * The array of strategies.

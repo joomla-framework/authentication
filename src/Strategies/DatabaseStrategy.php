@@ -55,7 +55,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @since   1.1.0
 	 */
-	public function __construct(Input $input, DatabaseInterface $database, array $options = [], HandlerInterface $passwordHandler = null)
+	public function __construct(Input $input, DatabaseInterface $database, array $options = [], ?HandlerInterface $passwordHandler = null)
 	{
 		parent::__construct($passwordHandler);
 

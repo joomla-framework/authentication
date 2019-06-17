@@ -84,7 +84,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
 
 		$this->assertEquals('username', $strategy->authenticate());
 		$this->assertEquals(Authentication::SUCCESS, $strategy->getResult());
@@ -105,7 +105,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::INVALID_CREDENTIALS, $strategy->getResult());
@@ -125,7 +125,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_CREDENTIALS, $strategy->getResult());
@@ -145,7 +145,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('jimbob', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, array(), $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_SUCH_USER, $strategy->getResult());

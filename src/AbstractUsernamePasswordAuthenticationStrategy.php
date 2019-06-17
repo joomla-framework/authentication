@@ -41,7 +41,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
 	 *
 	 * @since   1.2.0
 	 */
-	public function __construct(HandlerInterface $passwordHandler = null)
+	public function __construct(?HandlerInterface $passwordHandler = null)
 	{
 		$this->passwordHandler = $passwordHandler ?: new BCryptHandler;
 	}

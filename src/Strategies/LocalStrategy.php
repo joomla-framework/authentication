@@ -45,7 +45,7 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
 	 *
 	 * @since   1.0
 	 */
-	public function __construct(Input $input, array $credentialStore = [], HandlerInterface $passwordHandler = null)
+	public function __construct(Input $input, array $credentialStore = [], ?HandlerInterface $passwordHandler = null)
 	{
 		parent::__construct($passwordHandler);
 

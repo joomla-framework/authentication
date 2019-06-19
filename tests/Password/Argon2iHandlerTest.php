@@ -19,7 +19,7 @@ class Argon2iHandlerTest extends TestCase
 	 *
 	 * @return  void
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
 		if (!Argon2iHandler::isSupported())
 		{

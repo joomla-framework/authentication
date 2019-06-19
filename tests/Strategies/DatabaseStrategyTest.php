@@ -9,64 +9,102 @@ namespace Joomla\Authentication\Tests\Strategies;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\DatabaseStrategy;
+use Joomla\Authentication\Tests\DatabaseManager;
+use Joomla\Database\Exception\ExecutionFailureException;
 use Joomla\Input\Input;
-use Joomla\Test\TestDatabase;
+use Joomla\Test\DatabaseManager as BaseDatabaseManager;
+use Joomla\Test\DatabaseTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test class for \Joomla\Authentication\Strategies\DatabaseStrategy
  */
-class DatabaseStrategyTest extends TestDatabase
+class DatabaseStrategyTest extends DatabaseTestCase
 {
 	/**
-	 * @var  Input|\PHPUnit_Framework_MockObject_MockObject
+	 * @var  MockObject|Input
 	 */
 	private $input;
 
 	/**
-	 * @var  HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+	 * @var  MockObject|HandlerInterface
 	 */
 	private $passwordHandler;
+
+	/**
+	 * This method is called before the first test of this test class is run.
+	 *
+	 * @return  void
+	 */
+	public static function setUpBeforeClass(): void
+	{
+		parent::setUpBeforeClass();
+
+		try
+		{
+			static::getDatabaseManager()->loadSchema();
+		}
+		catch (ConnectionFailureException $exception)
+		{
+			static::markTestSkipped('Could not connect to the test database, cannot run database tests.');
+		}
+		catch (ExecutionFailureException $exception)
+		{
+			static::markTestSkipped('Could not load the schema to the test database, cannot run database tests.');
+		}
+	}
+
+	/**
+	 * Create the database manager for this test class.
+	 *
+	 * If necessary, this method can be extended to create your own subclass of the base DatabaseManager object to customise
+	 * the behaviors in your application.
+	 *
+	 * @return  DatabaseManager
+	 */
+	protected static function createDatabaseManager(): BaseDatabaseManager
+	{
+		return new DatabaseManager;
+	}
 
 	/**
 	 * Inserts a user into the test database
 	 *
 	 * @param   string  $username  Test username
 	 * @param   string  $password  Test hashed password
+	 *
+	 * @return  void
 	 */
-	private function addUser($username, $password)
+	private function addUser($username, $password): void
 	{
 		// Insert the user into the table
-		$db = self::$driver;
+		$db = static::$connection;
 
 		$db->setQuery(
 			$db->getQuery(true)
 				->insert('#__users')
 				->columns(['username', 'password'])
-				->values($db->quote($username) . ',' . $db->quote($password))
+				->values(':username, :password')
+				->bind(':username', $username)
+				->bind(':password', $password)
 		)->execute();
 	}
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
-		$this->input           = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
-		$this->passwordHandler = $this->getMockBuilder('Joomla\\Authentication\\Password\\HandlerInterface')->getMock();
+		$this->input           = $this->createMock(Input::class);
+		$this->passwordHandler = $this->createMock(HandlerInterface::class);
 	}
 
 	/**
 	 * Tears down the fixture, for example, close a network connection.
 	 */
-	protected function tearDown()
+	protected function tearDown(): void
 	{
-		// Truncate the table
-		$db = self::$driver;
-
-		$db->setQuery(
-			$db->getQuery(true)
-				->delete('#__users')
-		)->execute();
+		static::getDatabaseManager()->clearTables();
 	}
 
 	/**
@@ -84,7 +122,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, static::$connection, [], $this->passwordHandler);
 
 		$this->assertEquals('username', $strategy->authenticate());
 		$this->assertEquals(Authentication::SUCCESS, $strategy->getResult());
@@ -105,7 +143,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, static::$connection, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::INVALID_CREDENTIALS, $strategy->getResult());
@@ -125,7 +163,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('username', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, static::$connection, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_CREDENTIALS, $strategy->getResult());
@@ -145,7 +183,7 @@ class DatabaseStrategyTest extends TestDatabase
 
 		$this->addUser('jimbob', '$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-		$strategy = new DatabaseStrategy($this->input, self::$driver, [], $this->passwordHandler);
+		$strategy = new DatabaseStrategy($this->input, static::$connection, [], $this->passwordHandler);
 
 		$this->assertEquals(false, $strategy->authenticate());
 		$this->assertEquals(Authentication::NO_SUCH_USER, $strategy->getResult());

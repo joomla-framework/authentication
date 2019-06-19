@@ -10,6 +10,7 @@ use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Input\Input;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,22 +19,22 @@ use PHPUnit\Framework\TestCase;
 class LocalStrategyTest extends TestCase
 {
 	/**
-	 * @var  Input|\PHPUnit_Framework_MockObject_MockObject
+	 * @var  MockObject|Input
 	 */
 	private $input;
 
 	/**
-	 * @var  HandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+	 * @var  MockObject|HandlerInterface
 	 */
 	private $passwordHandler;
 
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
-	protected function setUp()
+	protected function setUp(): void
 	{
-		$this->input           = $this->getMockBuilder('Joomla\\Input\\Input')->getMock();
-		$this->passwordHandler = $this->getMockBuilder('Joomla\\Authentication\\Password\\HandlerInterface')->getMock();
+		$this->input           = $this->createMock(Input::class);
+		$this->passwordHandler = $this->createMock(HandlerInterface::class);
 	}
 
 	/**

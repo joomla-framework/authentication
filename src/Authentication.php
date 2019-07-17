@@ -84,7 +84,7 @@ class Authentication
 	/**
 	 * Perform authentication
 	 *
-	 * @param   AuthenticationStrategyInterface[]  $strategies  Array of strategies to try - empty to try all strategies.
+	 * @param   string[]  $strategies  Array of strategies to try - empty to try all strategies.
 	 *
 	 * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
 	 *

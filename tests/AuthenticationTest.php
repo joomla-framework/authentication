@@ -34,6 +34,8 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, specifying the strategy by name.
+	 *
+	 * @covers   Joomla\Authentication\Authentication
 	 */
 	public function testSingleStrategy()
 	{
@@ -50,6 +52,8 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using all strategies
+	 *
+	 * @covers   Joomla\Authentication\Authentication
 	 */
 	public function testSingleStrategyEmptyArray()
 	{
@@ -66,6 +70,8 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using some strategies.
+	 *
+	 * @covers   Joomla\Authentication\Authentication
 	 */
 	public function testSomeStrategies()
 	{
@@ -94,6 +100,8 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests the authenticate method, using a non registered strategy
+	 *
+	 * @covers   Joomla\Authentication\Authentication
 	 */
 	public function testStrategiesException()
 	{
@@ -104,6 +112,8 @@ class AuthenticationTest extends TestCase
 
 	/**
 	 * Tests getting the result back.
+	 *
+	 * @covers   Joomla\Authentication\Authentication
 	 */
 	public function testGetResults()
 	{

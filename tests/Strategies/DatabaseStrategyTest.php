@@ -109,6 +109,9 @@ class DatabaseStrategyTest extends DatabaseTestCase
 
 	/**
 	 * Tests the authenticate method with valid credentials.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testValidPassword()
 	{
@@ -130,6 +133,9 @@ class DatabaseStrategyTest extends DatabaseTestCase
 
 	/**
 	 * Tests the authenticate method with invalid credentials.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testInvalidPassword()
 	{
@@ -151,6 +157,9 @@ class DatabaseStrategyTest extends DatabaseTestCase
 
 	/**
 	 * Tests the authenticate method with no credentials provided.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testNoPassword()
 	{
@@ -171,6 +180,9 @@ class DatabaseStrategyTest extends DatabaseTestCase
 
 	/**
 	 * Tests the authenticate method with credentials for an unknown user.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testUserNotExist()
 	{

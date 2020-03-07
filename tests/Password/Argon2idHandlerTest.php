@@ -32,8 +32,7 @@ class Argon2idHandlerTest extends TestCase
 	/**
 	 * @testdox  A password is hashed and validated
 	 *
-	 * @covers   Joomla\Authentication\Password\Argon2idHandler::hashPassword
-	 * @covers   Joomla\Authentication\Password\Argon2idHandler::validatePassword
+	 * @covers   Joomla\Authentication\Password\Argon2idHandler
 	 */
 	public function testAPasswordIsHashedAndValidated()
 	{

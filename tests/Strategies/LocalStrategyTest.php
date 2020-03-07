@@ -39,6 +39,9 @@ class LocalStrategyTest extends TestCase
 
 	/**
 	 * Tests the authenticate method with valid credentials.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\LocalStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testValidPassword()
 	{
@@ -63,6 +66,9 @@ class LocalStrategyTest extends TestCase
 
 	/**
 	 * Tests the authenticate method with invalid credentials.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\LocalStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testInvalidPassword()
 	{
@@ -87,6 +93,9 @@ class LocalStrategyTest extends TestCase
 
 	/**
 	 * Tests the authenticate method with no credentials provided.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\LocalStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testNoPassword()
 	{
@@ -110,6 +119,9 @@ class LocalStrategyTest extends TestCase
 
 	/**
 	 * Tests the authenticate method with credentials for an unknown user.
+	 *
+	 * @covers   Joomla\Authentication\Strategies\LocalStrategy
+	 * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
 	 */
 	public function testUserNotExist()
 	{

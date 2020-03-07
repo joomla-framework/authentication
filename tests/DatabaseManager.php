@@ -51,6 +51,7 @@ SQL;
 				'driver'   => 'sqlite',
 				'database' => ':memory:',
 				'user'     => null,
+				'select'   => true,
 			];
 		}
 	}

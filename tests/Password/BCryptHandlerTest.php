@@ -17,8 +17,7 @@ class BCryptHandlerTest extends TestCase
 	/**
 	 * @testdox  A password is hashed and validated
 	 *
-	 * @covers   Joomla\Authentication\Password\BCryptHandler::hashPassword
-	 * @covers   Joomla\Authentication\Password\BCryptHandler::validatePassword
+	 * @covers   Joomla\Authentication\Password\BCryptHandler
 	 */
 	public function testAPasswordIsHashedAndValidated()
 	{

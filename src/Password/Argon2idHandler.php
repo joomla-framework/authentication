@@ -2,16 +2,18 @@
 /**
  * Part of the Joomla Framework Authentication Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Authentication\Password;
 
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
+
 /**
  * Password handler for Argon2id hashed passwords
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.0
  */
 class Argon2idHandler implements HandlerInterface
 {
@@ -23,18 +25,18 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
-	 * @throws  \LogicException
+	 * @since   1.3.0
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function hashPassword($plaintext, array $options = [])
 	{
 		// Use the password extension if able
-		if (version_compare(PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
+		if (version_compare(\PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
 		{
-			return password_hash($plaintext, PASSWORD_ARGON2ID, $options);
+			return password_hash($plaintext, \PASSWORD_ARGON2ID, $options);
 		}
 
-		throw new \LogicException('Argon2id algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2id algorithm is not supported.');
 	}
 
 	/**
@@ -42,12 +44,12 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.3.0
 	 */
 	public static function isSupported()
 	{
 		// Check for native PHP engine support in the password extension
-		if (version_compare(PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
+		if (version_compare(\PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
 		{
 			return true;
 		}
@@ -63,17 +65,17 @@ class Argon2idHandler implements HandlerInterface
 	 *
 	 * @return  boolean
 	 *
-	 * @since   __DEPLOY_VERSION__
-	 * @throws  \LogicException
+	 * @since   1.3.0
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function validatePassword($plaintext, $hashed)
 	{
 		// Use the password extension if able
-		if (version_compare(PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
+		if (version_compare(\PHP_VERSION, '7.3', '>=') && \defined('PASSWORD_ARGON2ID'))
 		{
 			return password_verify($plaintext, $hashed);
 		}
 
-		throw new \LogicException('Argon2id algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2id algorithm is not supported.');
 	}
 }

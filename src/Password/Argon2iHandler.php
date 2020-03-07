@@ -2,11 +2,13 @@
 /**
  * Part of the Joomla Framework Authentication Package
  *
- * @copyright  Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright  Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace Joomla\Authentication\Password;
+
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
 
 /**
  * Password handler for Argon2i hashed passwords
@@ -24,14 +26,14 @@ class Argon2iHandler implements HandlerInterface
 	 * @return  string
 	 *
 	 * @since   1.2.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function hashPassword($plaintext, array $options = [])
 	{
 		// Use the password extension if able
 		if (\defined('PASSWORD_ARGON2I'))
 		{
-			return password_hash($plaintext, PASSWORD_ARGON2I, $options);
+			return password_hash($plaintext, \PASSWORD_ARGON2I, $options);
 		}
 
 		// Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
@@ -39,8 +41,8 @@ class Argon2iHandler implements HandlerInterface
 		{
 			$hash = sodium_crypto_pwhash_str(
 				$plaintext,
-				SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-				SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+				\SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+				\SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
 			);
 			sodium_memzero($plaintext);
 
@@ -60,7 +62,7 @@ class Argon2iHandler implements HandlerInterface
 			return $hash;
 		}
 
-		throw new \LogicException('Argon2i algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
 	}
 
 	/**
@@ -97,7 +99,7 @@ class Argon2iHandler implements HandlerInterface
 	 * @return  boolean
 	 *
 	 * @since   1.2.0
-	 * @throws  \LogicException
+	 * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
 	 */
 	public function validatePassword($plaintext, $hashed)
 	{
@@ -125,6 +127,6 @@ class Argon2iHandler implements HandlerInterface
 			return $valid;
 		}
 
-		throw new \LogicException('Argon2i algorithm is not supported.');
+		throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
 	}
 }

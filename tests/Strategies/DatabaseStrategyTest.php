@@ -9,17 +9,17 @@ namespace Joomla\Authentication\Tests\Strategies;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\DatabaseStrategy;
-use Joomla\Authentication\Tests\CompatTestCase;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\QueryInterface;
 use Joomla\Input\Input;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Strategies\DatabaseStrategy
  */
-class DatabaseStrategyTest extends CompatTestCase
+class DatabaseStrategyTest extends TestCase
 {
 	/**
 	 * @var  MockObject|DatabaseDriver
@@ -39,13 +39,13 @@ class DatabaseStrategyTest extends CompatTestCase
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
-	protected function doSetUp()
+	protected function setUp(): void
 	{
 		$this->db              = $this->createMock(DatabaseInterface::class);
 		$this->input           = $this->createMock(Input::class);
 		$this->passwordHandler = $this->createMock(HandlerInterface::class);
 
-		parent::doSetUp();
+		parent::setUp();
 	}
 
 	/**

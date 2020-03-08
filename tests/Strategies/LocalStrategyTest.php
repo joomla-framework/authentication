@@ -9,14 +9,14 @@ namespace Joomla\Authentication\Tests\Strategies;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\LocalStrategy;
-use Joomla\Authentication\Tests\CompatTestCase;
 use Joomla\Input\Input;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Authentication\Strategies\LocalStrategy
  */
-class LocalStrategyTest extends CompatTestCase
+class LocalStrategyTest extends TestCase
 {
 	/**
 	 * @var  MockObject|Input
@@ -31,12 +31,12 @@ class LocalStrategyTest extends CompatTestCase
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 */
-	protected function doSetUp()
+	protected function setUp(): void
 	{
 		$this->input           = $this->createMock(Input::class);
 		$this->passwordHandler = $this->createMock(HandlerInterface::class);
 
-		parent::doSetUp();
+		parent::setUp();
 	}
 
 	/**

@@ -7,24 +7,24 @@
 namespace Joomla\Authentication\Tests\Password;
 
 use Joomla\Authentication\Password\Argon2idHandler;
-use Joomla\Authentication\Tests\CompatTestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Password\Argon2idHandler
  */
-class Argon2idHandlerTest extends CompatTestCase
+class Argon2idHandlerTest extends TestCase
 {
 	/**
 	 * This method is called before the first test of this test class is run.
 	 */
-	protected static function doSetUpBeforeClass()
+	public static function setUpBeforeClass(): void
 	{
 		if (!Argon2idHandler::isSupported())
 		{
 			self::markTestSkipped('Argon2id algorithm is not supported.');
 		}
 
-		parent::doSetUpBeforeClass();
+		parent::setUpBeforeClass();
 	}
 
 	/**

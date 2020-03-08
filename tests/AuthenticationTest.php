@@ -8,11 +8,12 @@ namespace Joomla\Authentication\Tests;
 
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\AuthenticationStrategyInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Authentication
  */
-class AuthenticationTest extends CompatTestCase
+class AuthenticationTest extends TestCase
 {
 	/**
 	 * Object being tested
@@ -26,7 +27,7 @@ class AuthenticationTest extends CompatTestCase
 	 *
 	 * @return  void
 	 */
-	protected function doSetUp()
+	protected function setUp(): void
 	{
 		$this->object = new Authentication;
 	}

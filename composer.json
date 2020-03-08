@@ -12,7 +12,8 @@
         "joomla/coding-standards": "^2.0@alpha",
         "joomla/database": "^2.0",
         "joomla/input": "^1.0|^2.0",
-        "phpunit/phpunit": "^8.5|^9.0"
+        "phpunit/phpunit": "^8.5|^9.0",
+        "symfony/phpunit-bridge": "^3.4|^4.4|^5.0"
     },
     "conflict": {
         "joomla/database": "<2.0"

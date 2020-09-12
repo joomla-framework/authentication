@@ -1,4 +1,4 @@
-# The Authentication Package [![Build Status](https://travis-ci.org/joomla-framework/authentication.png?branch=2.0-dev)](https://travis-ci.org/joomla-framework/authentication) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/joomla-framework/authentication/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/joomla-framework/authentication/?branch=2.0-dev)
+# The Authentication Package [![Build Status](https://ci.joomla.org/api/badges/joomla-framework/authentication/status.svg?ref=refs/heads/2.0-dev)](https://ci.joomla.org/joomla-framework/authentication)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/authentication/v/stable)](https://packagist.org/packages/joomla/authentication)
 [![Total Downloads](https://poser.pugx.org/joomla/authentication/downloads)](https://packagist.org/packages/joomla/authentication)

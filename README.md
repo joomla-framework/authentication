@@ -10,12 +10,12 @@ The authentication package provides a simple interface to authenticate users in 
 
 ## Installation via Composer
 
-Add `"joomla/authentication": "~1.0"` to the require block in your composer.json and then run `composer install`.
+Add `"joomla/authentication": "2.0.*@dev"` to the require block in your composer.json and then run `composer install`.
 
 ```json
 {
 	"require": {
-		"joomla/authentication": "~1.0"
+		"joomla/authentication": "2.0.*@dev"
 	}
 }
 ```
@@ -23,11 +23,11 @@ Add `"joomla/authentication": "~1.0"` to the require block in your composer.json
 Alternatively, you can simply run the following from the command line:
 
 ```sh
-composer require joomla/authentication "~1.0"
+composer require joomla/authentication "2.0.*@dev"
 ```
 
 If you want to include the test sources and docs, use
 
 ```sh
-composer require --prefer-source joomla/authentication "~1.0"
+composer require --prefer-source joomla/authentication "2.0.*@dev"
 ```

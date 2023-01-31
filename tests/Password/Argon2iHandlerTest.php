@@ -14,28 +14,27 @@ use PHPUnit\Framework\TestCase;
  */
 class Argon2iHandlerTest extends TestCase
 {
-	/**
-	 * This method is called before the first test of this test class is run.
-	 */
-	public static function setUpBeforeClass(): void
-	{
-		if (!Argon2iHandler::isSupported())
-		{
-			static::markTestSkipped('Argon2i algorithm is not supported.');
-		}
+    /**
+     * This method is called before the first test of this test class is run.
+     */
+    public static function setUpBeforeClass(): void
+    {
+        if (!Argon2iHandler::isSupported()) {
+            static::markTestSkipped('Argon2i algorithm is not supported.');
+        }
 
-		parent::setUpBeforeClass();
-	}
+        parent::setUpBeforeClass();
+    }
 
-	/**
-	 * @testdox  A password is hashed and validated
-	 *
-	 * @covers   Joomla\Authentication\Password\Argon2iHandler
-	 */
-	public function testAPasswordIsHashedAndValidated()
-	{
-		$handler = new Argon2iHandler;
-		$hash = $handler->hashPassword('password');
-		$this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
-	}
+    /**
+     * @testdox  A password is hashed and validated
+     *
+     * @covers   Joomla\Authentication\Password\Argon2iHandler
+     */
+    public function testAPasswordIsHashedAndValidated()
+    {
+        $handler = new Argon2iHandler();
+        $hash    = $handler->hashPassword('password');
+        $this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
+    }
 }

@@ -15,36 +15,36 @@ namespace Joomla\Authentication\Password;
  */
 interface HandlerInterface
 {
-	/**
-	 * Generate a hash for a plaintext password
-	 *
-	 * @param   string  $plaintext  The plaintext password to validate
-	 * @param   array   $options    Options for the hashing operation
-	 *
-	 * @return  string
-	 *
-	 * @since   1.2.0
-	 */
-	public function hashPassword($plaintext, array $options = []);
+    /**
+     * Generate a hash for a plaintext password
+     *
+     * @param   string  $plaintext  The plaintext password to validate
+     * @param   array   $options    Options for the hashing operation
+     *
+     * @return  string
+     *
+     * @since   1.2.0
+     */
+    public function hashPassword($plaintext, array $options = []);
 
-	/**
-	 * Check that the password handler is supported in this environment
-	 *
-	 * @return  boolean
-	 *
-	 * @since   1.2.0
-	 */
-	public static function isSupported();
+    /**
+     * Check that the password handler is supported in this environment
+     *
+     * @return  boolean
+     *
+     * @since   1.2.0
+     */
+    public static function isSupported();
 
-	/**
-	 * Validate a password
-	 *
-	 * @param   string  $plaintext  The plain text password to validate
-	 * @param   string  $hashed     The password hash to validate against
-	 *
-	 * @return  boolean
-	 *
-	 * @since   1.2.0
-	 */
-	public function validatePassword($plaintext, $hashed);
+    /**
+     * Validate a password
+     *
+     * @param   string  $plaintext  The plain text password to validate
+     * @param   string  $hashed     The password hash to validate against
+     *
+     * @return  boolean
+     *
+     * @since   1.2.0
+     */
+    public function validatePassword($plaintext, $hashed);
 }

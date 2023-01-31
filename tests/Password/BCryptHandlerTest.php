@@ -14,15 +14,15 @@ use PHPUnit\Framework\TestCase;
  */
 class BCryptHandlerTest extends TestCase
 {
-	/**
-	 * @testdox  A password is hashed and validated
-	 *
-	 * @covers   Joomla\Authentication\Password\BCryptHandler
-	 */
-	public function testAPasswordIsHashedAndValidated()
-	{
-		$handler = new BCryptHandler;
-		$hash    = $handler->hashPassword('password', ['cost' => 4]);
-		$this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
-	}
+    /**
+     * @testdox  A password is hashed and validated
+     *
+     * @covers   Joomla\Authentication\Password\BCryptHandler
+     */
+    public function testAPasswordIsHashedAndValidated()
+    {
+        $handler = new BCryptHandler();
+        $hash    = $handler->hashPassword('password', ['cost' => 4]);
+        $this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
+    }
 }

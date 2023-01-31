@@ -9,11 +9,11 @@
         "php": "~8.1.0"
     },
     "require-dev": {
-        "joomla/coding-standards": "^3.0@dev",
         "joomla/database": "^2.0",
         "joomla/input": "^2.0",
         "phpunit/phpunit": "^8.5|^9.0",
-        "symfony/phpunit-bridge": "^3.4.26|^4.1.12|^4.2.7|^5.0"
+        "symfony/phpunit-bridge": "^3.4.26|^4.1.12|^4.2.7|^5.0",
+        "squizlabs/php_codesniffer": "~3.7.1"
     },
     "conflict": {
         "joomla/database": "<2.0"

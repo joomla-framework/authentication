@@ -40,9 +40,9 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
     /**
      * Strategy Constructor
      *
-     * @param   Input             $input            The input object from which to retrieve the request credentials.
-     * @param   array             $credentialStore  Hash of username and hash pairs.
-     * @param   HandlerInterface  $passwordHandler  The password handler.
+     * @param   Input              $input            The input object from which to retrieve the request credentials.
+     * @param   array              $credentialStore  Hash of username and hash pairs.
+     * @param   ?HandlerInterface  $passwordHandler  The password handler.
      *
      * @since   1.0
      */

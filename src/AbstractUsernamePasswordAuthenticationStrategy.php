@@ -38,7 +38,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
     /**
      * Constructor.
      *
-     * @param   HandlerInterface  $passwordHandler  The password handler.
+     * @param   ?HandlerInterface  $passwordHandler  The password handler.
      *
      * @since   1.2.0
      */

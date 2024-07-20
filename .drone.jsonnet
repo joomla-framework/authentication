@@ -25,7 +25,7 @@ local composer(phpversion, params) = {
 local phpunit(phpversion) = {
     name: "PHPUnit",
     image: "joomlaprojects/docker-images:php" + phpversion,
-    [if phpversion == "8.3" then "failure"]: "ignore",
+    [if phpversion == "8.4" then "failure"]: "ignore",
     commands: ["vendor/bin/phpunit"]
 };
 

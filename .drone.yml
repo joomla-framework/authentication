@@ -122,7 +122,6 @@ steps:
     path: /tmp/composer-cache
 - commands:
   - vendor/bin/phpunit
-  failure: ignore
   image: joomlaprojects/docker-images:php8.3
   name: PHPUnit
 volumes:

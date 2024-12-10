@@ -24,7 +24,7 @@ steps:
   image: joomlaprojects/docker-images:php8.1-ast
   name: phan
 - commands:
-  - vendor/bin/phpstan analyse src
+  - ./vendor/bin/phpstan
   depends:
   - composer
   failure: ignore
@@ -109,7 +109,48 @@ volumes:
     path: /tmp/composer-cache
   name: composer-cache
 ---
+kind: pipeline
+name: PHP 8.3
+steps:
+- commands:
+  - php -v
+  - composer update --prefer-stable
+  image: joomlaprojects/docker-images:php8.3
+  name: composer
+  volumes:
+  - name: composer-cache
+    path: /tmp/composer-cache
+- commands:
+  - vendor/bin/phpunit
+  image: joomlaprojects/docker-images:php8.3
+  name: PHPUnit
+volumes:
+- host:
+    path: /tmp/composer-cache
+  name: composer-cache
+---
+kind: pipeline
+name: PHP 8.4
+steps:
+- commands:
+  - php -v
+  - composer update --prefer-stable
+  image: joomlaprojects/docker-images:php8.4
+  name: composer
+  volumes:
+  - name: composer-cache
+    path: /tmp/composer-cache
+- commands:
+  - vendor/bin/phpunit
+  failure: ignore
+  image: joomlaprojects/docker-images:php8.4
+  name: PHPUnit
+volumes:
+- host:
+    path: /tmp/composer-cache
+  name: composer-cache
+---
 kind: signature
-hmac: 812a6c48a35e9428fb83dcf0c0d6f5af2cb4a7d9eadc5104df50ae0a94be79c5
+hmac: f1387a4d434258a2643c7617d2c49f93f57a2680d8a1e5c124778238d1a59d53
 
 ...

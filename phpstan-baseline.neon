@@ -1,0 +1,10 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '''
+				#^Call to method bind\(\) of deprecated interface Joomla\\Database\\Query\\PreparableInterface\:
+				3\.0  Capabilities will be required in Joomla\\Database\\QueryInterface$#
+			'''
+			identifier: method.deprecatedInterface
+			count: 1
+			path: src/Strategies/DatabaseStrategy.php

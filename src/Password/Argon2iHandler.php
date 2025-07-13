@@ -9,8 +9,6 @@
 
 namespace Joomla\Authentication\Password;
 
-use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
-
 /**
  * Password handler for Argon2i hashed passwords
  *
@@ -27,7 +25,6 @@ class Argon2iHandler implements HandlerInterface
      * @return  string
      *
      * @since   1.2.0
-     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
      */
     public function hashPassword($plaintext, array $options = [])
     {
@@ -36,31 +33,15 @@ class Argon2iHandler implements HandlerInterface
             return password_hash($plaintext, \PASSWORD_ARGON2I, $options);
         }
 
-        // Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
-        if (\function_exists('sodium_crypto_pwhash_str_verify')) {
-            $hash = sodium_crypto_pwhash_str(
-                $plaintext,
-                \SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-                \SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
-            );
-            sodium_memzero($plaintext);
+        $hash = sodium_crypto_pwhash_str(
+            $plaintext,
+            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
+            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
+        );
 
-            return $hash;
-        }
+        sodium_memzero($plaintext);
 
-        // Use the libsodium extension (PECL 1.x) if able
-        if (\extension_loaded('libsodium')) {
-            $hash = \Sodium\crypto_pwhash_str(
-                $plaintext,
-                \Sodium\CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-                \Sodium\CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
-            );
-            \Sodium\memzero($plaintext);
-
-            return $hash;
-        }
-
-        throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
+        return $hash;
     }
 
     /**
@@ -77,13 +58,8 @@ class Argon2iHandler implements HandlerInterface
             return true;
         }
 
-        // Check if the sodium_compat polyfill is installed and look for compatibility through that
-        if (class_exists('\\ParagonIE_Sodium_Compat') && method_exists('\\ParagonIE_Sodium_Compat', 'crypto_pwhash_is_available')) {
-            return \ParagonIE_Sodium_Compat::crypto_pwhash_is_available();
-        }
-
         // Check for support from the (lib)sodium extension
-        return \function_exists('sodium_crypto_pwhash_str') || \extension_loaded('libsodium');
+        return \function_exists('sodium_crypto_pwhash_str');
     }
 
     /**
@@ -95,7 +71,6 @@ class Argon2iHandler implements HandlerInterface
      * @return  boolean
      *
      * @since   1.2.0
-     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
      */
     public function validatePassword($plaintext, $hashed)
     {
@@ -104,22 +79,9 @@ class Argon2iHandler implements HandlerInterface
             return password_verify($plaintext, $hashed);
         }
 
-        // Use the sodium extension (PHP 7.2 native or PECL 2.x) if able
-        if (\function_exists('sodium_crypto_pwhash_str_verify')) {
-            $valid = sodium_crypto_pwhash_str_verify($hashed, $plaintext);
-            sodium_memzero($plaintext);
+        $valid = sodium_crypto_pwhash_str_verify($hashed, $plaintext);
+        sodium_memzero($plaintext);
 
-            return $valid;
-        }
-
-        // Use the libsodium extension (PECL 1.x) if able
-        if (\extension_loaded('libsodium')) {
-            $valid = \Sodium\crypto_pwhash_str_verify($hashed, $plaintext);
-            \Sodium\memzero($plaintext);
-
-            return $valid;
-        }
-
-        throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
+        return $valid;
     }
 }

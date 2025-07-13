@@ -75,7 +75,7 @@ class DatabaseStrategyTest extends TestCase
             ->willReturnSelf();
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturn($query);
 
         $this->db->expects($this->once())
@@ -127,7 +127,7 @@ class DatabaseStrategyTest extends TestCase
             ->willReturnSelf();
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturn($query);
 
         $this->db->expects($this->once())
@@ -203,7 +203,7 @@ class DatabaseStrategyTest extends TestCase
             ->willReturnSelf();
 
         $this->db->expects($this->any())
-            ->method('getQuery')
+            ->method('createQuery')
             ->willReturn($query);
 
         $this->db->expects($this->once())

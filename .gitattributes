@@ -1,5 +1,4 @@
 .github/ export-ignore
-.phan/ export-ignore
 docs/ export-ignore
 tests/ export-ignore
 .drone.jsonnet export-ignore

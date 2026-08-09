@@ -60,23 +60,23 @@ class DatabaseStrategyTest extends TestCase
     public function testValidPassword()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -89,11 +89,11 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn('$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(true);
 
@@ -109,23 +109,23 @@ class DatabaseStrategyTest extends TestCase
     public function testInvalidPassword()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -138,11 +138,11 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn('$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(false);
 
@@ -160,7 +160,7 @@ class DatabaseStrategyTest extends TestCase
         $this->db->expects($this->never())
             ->method('setQuery');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturn(false);
 
@@ -179,23 +179,23 @@ class DatabaseStrategyTest extends TestCase
     public function testUserNotExist()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -208,7 +208,7 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn(null);
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 

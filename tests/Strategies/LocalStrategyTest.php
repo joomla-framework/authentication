@@ -50,11 +50,11 @@ class LocalStrategyTest extends TestCase
      */
     public function testValidPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(true);
 
@@ -74,11 +74,11 @@ class LocalStrategyTest extends TestCase
      */
     public function testInvalidPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(false);
 
@@ -98,7 +98,7 @@ class LocalStrategyTest extends TestCase
      */
     public function testNoPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturn(false);
 
@@ -121,7 +121,7 @@ class LocalStrategyTest extends TestCase
      */
     public function testUserNotExist()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 

@@ -8,11 +8,14 @@
 namespace Joomla\Authentication\Tests\Password;
 
 use Joomla\Authentication\Password\Argon2iHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Password\Argon2iHandler
  */
+#[CoversClass(Argon2iHandler::class)]
 class Argon2iHandlerTest extends TestCase
 {
     /**
@@ -27,11 +30,7 @@ class Argon2iHandlerTest extends TestCase
         parent::setUpBeforeClass();
     }
 
-    /**
-     * @testdox  A password is hashed and validated
-     *
-     * @covers   Joomla\Authentication\Password\Argon2iHandler
-     */
+    #[TestDox('A password is hashed and validated')]
     public function testAPasswordIsHashedAndValidated()
     {
         $handler = new Argon2iHandler();

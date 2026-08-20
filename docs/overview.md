@@ -1,6 +1,6 @@
 # Using the Authentication Package
 
-The authentication package provides a decoupled authentication system for providing authentication in your 
+The authentication package provides a decoupled authentication system for providing authentication in your
 application.  Authentication strategies are swappable.
 
 Authentication would generally be performed in your application by doing the following:
@@ -90,10 +90,59 @@ $strategy = new Authentication\Strategies\Database($input, $database, $options);
 This function must perform whatever actions are necessary to verify whether there are valid credentials.  The
 credential source is generally determined by the object constructor where they get passed in as dependencies.
 As an example, LocalStrategy takes an Input object and a hash of credential pairs.  The method should set the
-set the status of the authentication attempt for retrieval from the getStatus() method.
+ status of the authentication attempt for retrieval from the getStatus() method.
 
 
 ### <> public getStatus()
 
 This function should return the status of the last authentication attempt (specified using Authentication class
 constants).
+
+## Things to know before you build on this
+
+**A failed login tells the caller which half was wrong.** `getResults()` distinguishes
+`Authentication::NO_SUCH_USER` from `Authentication::INVALID_CREDENTIALS`. Log the distinction,
+but show the user one message — otherwise the endpoint confirms which usernames exist.
+
+**An unknown user is rejected faster than a wrong password.** When `getHashedPassword()` returns
+`false`, the strategy returns before any hash is verified, so no bcrypt or Argon2 work happens.
+The difference is measurable over the network and enumerates usernames even when the status is
+hidden. Verify against a dummy hash before rejecting:
+
+```php
+protected function doAuthenticate($username, $password)
+{
+    $hash = $this->getHashedPassword($username) ?: self::DUMMY_HASH;
+
+    $valid = $this->verifyPassword($username, $password, $hash);
+    // … then decide, using the same code path either way
+}
+```
+
+**There is no brute-force protection.** No attempt counter, no lockout, no delay. Add rate
+limiting around `authenticate()`.
+
+**Hashes are never upgraded.** `HandlerInterface` has no `needsRehash()`, so a password hashed
+years ago keeps its original cost even after you raise it. A successful login is the only moment
+the plaintext is available — do the rehash there yourself:
+
+```php
+if ($username !== false && password_needs_rehash($storedHash, PASSWORD_BCRYPT, ['cost' => 12])) {
+    $users->updatePassword($username, $handler->hashPassword($password, ['cost' => 12]));
+}
+```
+
+**`Argon2iHandler` produces Argon2id in the fallback path.** When `PASSWORD_ARGON2I` is undefined
+it calls `sodium_crypto_pwhash_str()`, which emits an `$argon2id$` hash. The class name then does
+not describe the output. It also ignores `$options` on that path and always uses the INTERACTIVE
+limits.
+
+**A malformed hash crashes the login.** `Argon2iHandler::validatePassword()` calls
+`sodium_crypto_pwhash_str_verify()` without a `try`/`catch`, so a truncated or foreign hash in the
+database raises a `SodiumException` instead of failing the attempt.
+
+**`DatabaseStrategy` ignores account state.** The query selects the password column only, so
+blocked or unactivated accounts authenticate like any other. Check that after `authenticate()`
+returns.
+
+**`LocalStrategy` is for tests.** It holds the credential map in memory as plain values.

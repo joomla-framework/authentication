@@ -10,18 +10,17 @@ namespace Joomla\Authentication\Tests;
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
  */
+#[CoversClass(AbstractUsernamePasswordAuthenticationStrategy::class)]
 class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
 {
-    /**
-     * @testdox  A user can be successfully authenticated
-     *
-     * @covers   Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
-     */
+    #[TestDox('A user can be successfully authenticated')]
     public function testAuthenticateSuccess()
     {
         $handler = $this->createMock(HandlerInterface::class);
@@ -45,11 +44,7 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
         $this->assertSame(Authentication::SUCCESS, $strategy->getResult(), 'The correct result status is set');
     }
 
-    /**
-     * @testdox  A user cannot be authenticated when a password cannot be found for the username
-     *
-     * @covers   Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
-     */
+    #[TestDox('A user cannot be authenticated when a password cannot be found for the username')]
     public function testAuthenticateNoUser()
     {
         $handler = $this->createMock(HandlerInterface::class);
@@ -72,11 +67,7 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
         $this->assertSame(Authentication::NO_SUCH_USER, $strategy->getResult(), 'The correct result status is set');
     }
 
-    /**
-     * @testdox  A user cannot be authenticated when the password cannot be validated
-     *
-     * @covers   Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
-     */
+    #[TestDox('A user cannot be authenticated when the password cannot be validated')]
     public function testAuthenticateInvalidPassword()
     {
         $handler = $this->createMock(HandlerInterface::class);

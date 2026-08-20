@@ -7,16 +7,21 @@
 
 namespace Joomla\Authentication\Tests\Strategies;
 
+use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Input\Input;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Joomla\Authentication\Strategies\LocalStrategy
  */
+#[CoversClass(LocalStrategy::class)]
+#[UsesClass(AbstractUsernamePasswordAuthenticationStrategy::class)]
 class LocalStrategyTest extends TestCase
 {
     /**
@@ -42,17 +47,14 @@ class LocalStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with valid credentials.
-     *
-     * @covers   Joomla\Authentication\Strategies\LocalStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testValidPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(true);
 
@@ -69,17 +71,14 @@ class LocalStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with invalid credentials.
-     *
-     * @covers   Joomla\Authentication\Strategies\LocalStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testInvalidPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(false);
 
@@ -96,13 +95,10 @@ class LocalStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with no credentials provided.
-     *
-     * @covers   Joomla\Authentication\Strategies\LocalStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testNoPassword()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturn(false);
 
@@ -122,13 +118,10 @@ class LocalStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with credentials for an unknown user.
-     *
-     * @covers   Joomla\Authentication\Strategies\LocalStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testUserNotExist()
     {
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 

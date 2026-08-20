@@ -7,6 +7,7 @@
 
 namespace Joomla\Authentication\Tests\Strategies;
 
+use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\DatabaseStrategy;
@@ -14,12 +15,16 @@ use Joomla\Database\DatabaseDriver;
 use Joomla\Database\DatabaseInterface;
 use Joomla\Database\QueryInterface;
 use Joomla\Input\Input;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Strategies\DatabaseStrategy
  */
+#[CoversClass(DatabaseStrategy::class)]
+#[UsesClass(AbstractUsernamePasswordAuthenticationStrategy::class)]
 class DatabaseStrategyTest extends TestCase
 {
     /**
@@ -51,30 +56,27 @@ class DatabaseStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with valid credentials.
-     *
-     * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testValidPassword()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -87,11 +89,11 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn('$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJG');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(true);
 
@@ -103,30 +105,27 @@ class DatabaseStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with invalid credentials.
-     *
-     * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testInvalidPassword()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -139,11 +138,11 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn('$2y$10$.vpEGa99w.WUetDFJXjMn.RiKRhZ/ImzxtOjtoJ0VFDV8S7ua0uJH');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 
-        $this->passwordHandler->expects($this->any())
+        $this->passwordHandler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(false);
 
@@ -155,16 +154,13 @@ class DatabaseStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with no credentials provided.
-     *
-     * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testNoPassword()
     {
         $this->db->expects($this->never())
             ->method('setQuery');
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturn(false);
 
@@ -179,30 +175,27 @@ class DatabaseStrategyTest extends TestCase
 
     /**
      * Tests the authenticate method with credentials for an unknown user.
-     *
-     * @covers   Joomla\Authentication\Strategies\DatabaseStrategy
-     * @uses     Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy
      */
     public function testUserNotExist()
     {
         $query = $this->createMock(QueryInterface::class);
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('select')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('from')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('where')
             ->willReturnSelf();
 
-        $query->expects($this->any())
+        $query->expects($this->once())
             ->method('bind')
             ->willReturnSelf();
 
-        $this->db->expects($this->any())
+        $this->db->expects($this->once())
             ->method('createQuery')
             ->willReturn($query);
 
@@ -215,7 +208,7 @@ class DatabaseStrategyTest extends TestCase
             ->method('loadResult')
             ->willReturn(null);
 
-        $this->input->expects($this->any())
+        $this->input->expects($this->exactly(2))
             ->method('get')
             ->willReturnArgument(0);
 

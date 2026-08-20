@@ -8,18 +8,17 @@
 namespace Joomla\Authentication\Tests\Password;
 
 use Joomla\Authentication\Password\BCryptHandler;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Joomla\Authentication\Password\BCryptHandler
  */
+#[CoversClass(BCryptHandler::class)]
 class BCryptHandlerTest extends TestCase
 {
-    /**
-     * @testdox  A password is hashed and validated
-     *
-     * @covers   Joomla\Authentication\Password\BCryptHandler
-     */
+    #[TestDox('A password is hashed and validated')]
     public function testAPasswordIsHashedAndValidated()
     {
         $handler = new BCryptHandler();

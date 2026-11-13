@@ -38,6 +38,10 @@ Attempts authentication.  Uses all strategies if the array is empty, or a subset
 
 Gets a hashed array of strategies and authentication results.
 
+The results describe the last call to `authenticate()` only; each call starts with an empty list.
+Strategies are tried in order until one succeeds, so a strategy after the successful one is not run
+and has no entry.
+
 ```php
 $authentication->getResults();
 

@@ -112,6 +112,8 @@ class Authentication
             throw new \RuntimeException('No strategies have been set');
         }
 
+        $this->results = [];
+
         /** @var AuthenticationStrategyInterface $strategyObject */
         foreach ($strategyObjects as $strategy => $strategyObject) {
             $username = $strategyObject->authenticate();
@@ -129,7 +131,8 @@ class Authentication
     /**
      * Get authentication results.
      *
-     * Use this if you want to get more detailed information about the results of an authentication attempts.
+     * Use this if you want to get more detailed information about the results of the last authentication attempt.
+     * Strategies are tried in order until one succeeds, so the strategies after a successful one have no entry.
      *
      * @return  integer[]  An array containing authentication results.
      *

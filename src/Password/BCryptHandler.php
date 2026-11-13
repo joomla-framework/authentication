@@ -14,7 +14,7 @@ namespace Joomla\Authentication\Password;
  *
  * @since  1.2.0
  */
-class BCryptHandler implements HandlerInterface
+class BCryptHandler implements RehashAwareHandlerInterface
 {
     /**
      * Generate a hash for a plaintext password
@@ -42,6 +42,21 @@ class BCryptHandler implements HandlerInterface
     {
         // Check the password_verify() function exists, either as part of PHP core or through a polyfill
         return \function_exists('password_verify');
+    }
+
+    /**
+     * Check whether a hash was not created with this handler's algorithm and options and should be replaced
+     *
+     * @param   string  $hash     The password hash to check
+     * @param   array   $options  The options a new hash would be created with
+     *
+     * @return  boolean
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function needsRehash(string $hash, array $options = []): bool
+    {
+        return password_needs_rehash($hash, \PASSWORD_BCRYPT, $options);
     }
 
     /**

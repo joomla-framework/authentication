@@ -37,4 +37,22 @@ class Argon2iHandlerTest extends TestCase
         $hash    = $handler->hashPassword('password');
         $this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
     }
+
+    #[TestDox('A hash with other options or another algorithm needs a rehash')]
+    public function testNeedsRehash()
+    {
+        $handler = new Argon2iHandler();
+        $hash    = $handler->hashPassword('password', ['memory_cost' => 1024, 'time_cost' => 1, 'threads' => 1]);
+
+        $this->assertFalse(
+            $handler->needsRehash($hash, ['memory_cost' => 1024, 'time_cost' => 1, 'threads' => 1]),
+            'A hash with the same options must not need a rehash.'
+        );
+        $this->assertTrue($handler->needsRehash($hash), 'A hash with weaker options must need a rehash.');
+        $this->assertTrue(
+            $handler->needsRehash(password_hash('password', \PASSWORD_BCRYPT, ['cost' => 4])),
+            'A hash of another algorithm must need a rehash.'
+        );
+    }
+
 }

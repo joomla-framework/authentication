@@ -11,6 +11,7 @@ namespace Joomla\Authentication;
 
 use Joomla\Authentication\Password\BCryptHandler;
 use Joomla\Authentication\Password\HandlerInterface;
+use Joomla\Authentication\Password\RehashAwareHandlerInterface;
 
 /**
  * Abstract AuthenticationStrategy for username/password based authentication
@@ -73,6 +74,13 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
             return false;
         }
 
+        if (
+            $this->passwordHandler instanceof RehashAwareHandlerInterface
+            && $this->passwordHandler->needsRehash($hashedPassword)
+        ) {
+            $this->rehashPassword($username, $password);
+        }
+
         $this->status = Authentication::SUCCESS;
 
         return $username;
@@ -99,6 +107,24 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
     public function getResult()
     {
         return $this->status;
+    }
+
+    /**
+     * Store a new hash of the password after a successful login with an outdated hash.
+     *
+     * Called when the password handler implements RehashAwareHandlerInterface and reports that the stored hash was
+     * not created with its current algorithm and options. The default implementation does nothing; override it to
+     * replace the stored hash with `$this->passwordHandler->hashPassword($password)`.
+     *
+     * @param   string  $username  The username that was authenticated.
+     * @param   string  $password  The plaintext password that was verified.
+     *
+     * @return  void
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    protected function rehashPassword(string $username, string $password): void
+    {
     }
 
     /**

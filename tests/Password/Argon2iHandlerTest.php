@@ -37,4 +37,18 @@ class Argon2iHandlerTest extends TestCase
         $hash    = $handler->hashPassword('password');
         $this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
     }
+
+    #[TestDox('A password is hashed with Argon2i and the given options')]
+    public function testAPasswordIsHashedWithArgon2iAndTheGivenOptions()
+    {
+        $handler = new Argon2iHandler();
+        $hash    = $handler->hashPassword('password', ['memory_cost' => 1024, 'time_cost' => 2, 'threads' => 1]);
+
+        $this->assertStringStartsWith('$argon2i$', $hash);
+        $this->assertSame(
+            ['memory_cost' => 1024, 'time_cost' => 2, 'threads' => 1],
+            password_get_info($hash)['options']
+        );
+    }
+
 }

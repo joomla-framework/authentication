@@ -27,7 +27,7 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      * @var    array
      * @since  1.0
      */
-    private $credentialStore;
+    private array $credentialStore;
 
     /**
      * The Input object
@@ -35,7 +35,7 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      * @var    Input
      * @since  1.0
      */
-    private $input;
+    private Input $input;
 
     /**
      * Strategy Constructor
@@ -57,11 +57,11 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
     /**
      * Attempt to authenticate the username and password pair.
      *
-     * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
+     * @return  string|false  A string containing a username if authentication is successful, false otherwise.
      *
      * @since   1.0
      */
-    public function authenticate()
+    public function authenticate(): string|false
     {
         $username = $this->input->get('username', false, 'username');
         $password = $this->input->get('password', false, 'raw');
@@ -80,11 +80,11 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      *
      * @param   string  $username  Username to lookup.
      *
-     * @return  string|boolean  Hashed password on success or boolean false on failure.
+     * @return  string|false  Hashed password on success or boolean false on failure.
      *
      * @since   1.1.0
      */
-    protected function getHashedPassword($username)
+    protected function getHashedPassword(string $username): string|false
     {
         return $this->credentialStore[$username] ?? false;
     }

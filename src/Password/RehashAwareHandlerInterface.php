@@ -12,19 +12,11 @@ namespace Joomla\Authentication\Password;
 /**
  * Interface defining a password handler that can tell whether a hash should be upgraded
  *
- * @since  __DEPLOY_VERSION__
+ * Since 5.0 needsRehash() is part of HandlerInterface, so this interface adds nothing.
+ *
+ * @since       __DEPLOY_VERSION__
+ * @deprecated  6.0 Implement HandlerInterface instead
  */
 interface RehashAwareHandlerInterface extends HandlerInterface
 {
-    /**
-     * Check whether a hash was not created with this handler's algorithm and options and should be replaced
-     *
-     * @param   string  $hash     The password hash to check
-     * @param   array   $options  The options a new hash would be created with
-     *
-     * @return  boolean
-     *
-     * @since   __DEPLOY_VERSION__
-     */
-    public function needsRehash(string $hash, array $options = []): bool;
 }

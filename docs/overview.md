@@ -24,17 +24,18 @@ $username = $authentication->authenticate(array('local'));       // Just use the
 
 ## class `Authentication\Authentication`
 
-### <> public addStrategy(String $strategyName, AuthenticationStrategyInterface $strategy)
+### <> public addStrategy(string $strategyName, AuthenticationStrategyInterface $strategy): void
 
 Adds a strategy object to the list of available strategies to use for authentication.
 
 
-### <> public authenticate($strategies = array())
+### <> public authenticate(array $strategies = []): string|false
 
 Attempts authentication.  Uses all strategies if the array is empty, or a subset of one or more if provided.
+Returns the username on success and `false` otherwise.
 
 
-### <> public getResults()
+### <> public getResults(): array
 
 Gets a hashed array of strategies and authentication results.
 
@@ -85,18 +86,18 @@ $strategy = new Authentication\Strategies\Database($input, $database, $options);
 
 ## interface `Authentication\AuthenticationStrategyInterface`
 
-### <> public authenticate()
+### <> public authenticate(): string|false
 
 This function must perform whatever actions are necessary to verify whether there are valid credentials.  The
 credential source is generally determined by the object constructor where they get passed in as dependencies.
 As an example, LocalStrategy takes an Input object and a hash of credential pairs.  The method should set the
- status of the authentication attempt for retrieval from the getStatus() method.
+ status of the authentication attempt for retrieval from the getResult() method.
 
 
-### <> public getStatus()
+### <> public getResult(): ?int
 
 This function should return the status of the last authentication attempt (specified using Authentication class
-constants).
+constants), or `null` before the first attempt.
 
 ## Things to know before you build on this
 
@@ -119,13 +120,17 @@ protected function doAuthenticate($username, $password)
 }
 ```
 
+**bcrypt uses only the first 72 bytes of a password.** `BCryptHandler`, the default handler,
+validates any password that shares the first 72 bytes with the stored one, and a password containing
+a NUL byte makes `password_hash()` throw a `ValueError`. Use `Argon2idHandler` if long passphrases
+must count in full, or limit the password length when users set one.
+
 **There is no brute-force protection.** No attempt counter, no lockout, no delay. Add rate
 limiting around `authenticate()`.
 
-**Hashes are upgraded only if you store them.** The bundled handlers implement
-`Password\RehashAwareHandlerInterface`, whose `needsRehash(string $hash, array $options = []): bool`
-reports whether a hash was made with another algorithm or other options than the handler would use
-(it wraps `password_needs_rehash()`). After a successful login with such a hash,
+**Hashes are upgraded only if you store them.** `Password\HandlerInterface::needsRehash(string $hash,
+array $options = []): bool` reports whether a hash was made with another algorithm or other options
+than the handler would use (it wraps `password_needs_rehash()`). After a successful login with such a hash,
 `AbstractUsernamePasswordAuthenticationStrategy` calls its protected
 `rehashPassword(string $username, string $password): void` hook — a successful login is the only
 moment the plaintext is available. The default implementation does nothing, because neither

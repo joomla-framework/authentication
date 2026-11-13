@@ -26,7 +26,7 @@ interface HandlerInterface
      *
      * @since   1.2.0
      */
-    public function hashPassword($plaintext, array $options = []);
+    public function hashPassword(string $plaintext, array $options = []): string;
 
     /**
      * Check that the password handler is supported in this environment
@@ -35,7 +35,7 @@ interface HandlerInterface
      *
      * @since   1.2.0
      */
-    public static function isSupported();
+    public static function isSupported(): bool;
 
     /**
      * Validate a password
@@ -47,5 +47,17 @@ interface HandlerInterface
      *
      * @since   1.2.0
      */
-    public function validatePassword($plaintext, $hashed);
+    public function validatePassword(string $plaintext, string $hashed): bool;
+
+    /**
+     * Check whether a hash was not created with this handler's algorithm and options and should be replaced
+     *
+     * @param   string  $hash     The password hash to check
+     * @param   array   $options  The options a new hash would be created with
+     *
+     * @return  boolean
+     *
+     * @since   __DEPLOY_VERSION__
+     */
+    public function needsRehash(string $hash, array $options = []): bool;
 }

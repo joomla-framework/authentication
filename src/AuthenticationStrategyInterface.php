@@ -19,18 +19,18 @@ interface AuthenticationStrategyInterface
     /**
      * Attempt authentication.
      *
-     * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
+     * @return  string|false  A string containing a username if authentication is successful, false otherwise.
      *
      * @since   1.0
      */
-    public function authenticate();
+    public function authenticate(): string|false;
 
     /**
      * Get last authentication result.
      *
-     * @return  integer  An integer from Authentication class constants with the authentication result.
+     * @return  ?integer  An integer from Authentication class constants with the authentication result, null before the first attempt.
      *
      * @since   1.0
      */
-    public function getResult();
+    public function getResult(): ?int;
 }

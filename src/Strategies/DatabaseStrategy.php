@@ -28,7 +28,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      * @var    DatabaseInterface
      * @since  1.1.0
      */
-    private $db;
+    private DatabaseInterface $db;
 
     /**
      * Database connection options
@@ -36,7 +36,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      * @var    array
      * @since  1.1.0
      */
-    private $dbOptions;
+    private array $dbOptions;
 
     /**
      * The Input object
@@ -44,7 +44,7 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      * @var    Input
      * @since  1.1.0
      */
-    private $input;
+    private Input $input;
 
     /**
      * Strategy Constructor
@@ -73,11 +73,11 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
     /**
      * Attempt to authenticate the username and password pair.
      *
-     * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
+     * @return  string|false  A string containing a username if authentication is successful, false otherwise.
      *
      * @since   1.1.0
      */
-    public function authenticate()
+    public function authenticate(): string|false
     {
         $username = $this->input->get('username', false, 'username');
         $password = $this->input->get('password', false, 'raw');
@@ -96,11 +96,11 @@ class DatabaseStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      *
      * @param   string  $username  Username to lookup.
      *
-     * @return  string|boolean  Hashed password on success or boolean false on failure.
+     * @return  string|false  Hashed password on success or boolean false on failure.
      *
      * @since   1.1.0
      */
-    protected function getHashedPassword($username)
+    protected function getHashedPassword(string $username): string|false
     {
         try {
             $password = $this->db->setQuery(

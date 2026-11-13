@@ -11,7 +11,6 @@ namespace Joomla\Authentication;
 
 use Joomla\Authentication\Password\BCryptHandler;
 use Joomla\Authentication\Password\HandlerInterface;
-use Joomla\Authentication\Password\RehashAwareHandlerInterface;
 
 /**
  * Abstract AuthenticationStrategy for username/password based authentication
@@ -26,15 +25,15 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
      * @var    HandlerInterface
      * @since  1.2.0
      */
-    protected $passwordHandler;
+    protected HandlerInterface $passwordHandler;
 
     /**
      * The last authentication status.
      *
-     * @var    integer
+     * @var    ?integer
      * @since  1.1.0
      */
-    protected $status;
+    protected ?int $status = null;
 
     /**
      * Constructor.
@@ -54,11 +53,11 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
      * @param   string  $username  The username to authenticate.
      * @param   string  $password  The password to attempt authentication with.
      *
-     * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
+     * @return  string|false  A string containing a username if authentication is successful, false otherwise.
      *
      * @since   1.1.0
      */
-    protected function doAuthenticate($username, $password)
+    protected function doAuthenticate(string $username, string $password): string|false
     {
         $hashedPassword = $this->getHashedPassword($username);
 
@@ -74,10 +73,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
             return false;
         }
 
-        if (
-            $this->passwordHandler instanceof RehashAwareHandlerInterface
-            && $this->passwordHandler->needsRehash($hashedPassword)
-        ) {
+        if ($this->passwordHandler->needsRehash($hashedPassword)) {
             $this->rehashPassword($username, $password);
         }
 
@@ -91,20 +87,20 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
      *
      * @param   string  $username  Username to lookup.
      *
-     * @return  string|boolean  Hashed password on success or boolean false on failure.
+     * @return  string|false  Hashed password on success or boolean false on failure.
      *
      * @since   1.1.0
      */
-    abstract protected function getHashedPassword($username);
+    abstract protected function getHashedPassword(string $username): string|false;
 
     /**
      * Get the status of the last authentication attempt.
      *
-     * @return  integer  Authentication class constant result.
+     * @return  ?integer  Authentication class constant result, null before the first attempt.
      *
      * @since   1.1.0
      */
-    public function getResult()
+    public function getResult(): ?int
     {
         return $this->status;
     }
@@ -112,9 +108,9 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
     /**
      * Store a new hash of the password after a successful login with an outdated hash.
      *
-     * Called when the password handler implements RehashAwareHandlerInterface and reports that the stored hash was
-     * not created with its current algorithm and options. The default implementation does nothing; override it to
-     * replace the stored hash with `$this->passwordHandler->hashPassword($password)`.
+     * Called when the password handler reports that the stored hash was not created with its current algorithm and
+     * options. The default implementation does nothing; override it to replace the stored hash with
+     * `$this->passwordHandler->hashPassword($password)`.
      *
      * @param   string  $username  The username that was authenticated.
      * @param   string  $password  The plaintext password that was verified.
@@ -138,7 +134,7 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
      *
      * @since   1.1.0
      */
-    protected function verifyPassword($username, $password, $hashedPassword)
+    protected function verifyPassword(string $username, string $password, string $hashedPassword): bool
     {
         return $this->passwordHandler->validatePassword($password, $hashedPassword);
     }

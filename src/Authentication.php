@@ -57,7 +57,7 @@ class Authentication
      * @var    AuthenticationStrategyInterface[]
      * @since  1.0
      */
-    private $strategies = [];
+    private array $strategies = [];
 
     /**
      * The array of results.
@@ -65,7 +65,7 @@ class Authentication
      * @var    integer[]
      * @since  1.0
      */
-    private $results = [];
+    private array $results = [];
 
     /**
      * Register a new strategy
@@ -77,7 +77,7 @@ class Authentication
      *
      * @since   1.0
      */
-    public function addStrategy($strategyName, AuthenticationStrategyInterface $strategy)
+    public function addStrategy(string $strategyName, AuthenticationStrategyInterface $strategy): void
     {
         $this->strategies[$strategyName] = $strategy;
     }
@@ -87,12 +87,12 @@ class Authentication
      *
      * @param   string[]  $strategies  Array of strategies to try - empty to try all strategies.
      *
-     * @return  string|boolean  A string containing a username if authentication is successful, false otherwise.
+     * @return  string|false  A string containing a username if authentication is successful, false otherwise.
      *
      * @since   1.0
      * @throws  \RuntimeException
      */
-    public function authenticate(array $strategies = [])
+    public function authenticate(array $strategies = []): string|false
     {
         if (empty($strategies)) {
             $strategyObjects = $this->strategies;
@@ -135,7 +135,7 @@ class Authentication
      *
      * @since   1.0
      */
-    public function getResults()
+    public function getResults(): array
     {
         return $this->results;
     }

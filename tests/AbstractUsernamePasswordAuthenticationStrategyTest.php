@@ -10,7 +10,6 @@ namespace Joomla\Authentication\Tests;
 use Joomla\Authentication\AbstractUsernamePasswordAuthenticationStrategy;
 use Joomla\Authentication\Authentication;
 use Joomla\Authentication\Password\HandlerInterface;
-use Joomla\Authentication\Password\RehashAwareHandlerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
@@ -30,12 +29,12 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
             ->willReturn(true);
 
         $strategy = new class ($handler) extends AbstractUsernamePasswordAuthenticationStrategy {
-            public function authenticate()
+            public function authenticate(): string|false
             {
                 return $this->doAuthenticate('username', 'password');
             }
 
-            protected function getHashedPassword($username)
+            protected function getHashedPassword(string $username): string|false
             {
                 return 'password';
             }
@@ -43,6 +42,24 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
 
         $this->assertSame('username', $strategy->authenticate());
         $this->assertSame(Authentication::SUCCESS, $strategy->getResult(), 'The correct result status is set');
+    }
+
+    #[TestDox('The result is null before the first authentication attempt')]
+    public function testResultIsNullBeforeTheFirstAttempt()
+    {
+        $strategy = new class ($this->createStub(HandlerInterface::class)) extends AbstractUsernamePasswordAuthenticationStrategy {
+            public function authenticate(): string|false
+            {
+                return $this->doAuthenticate('username', 'password');
+            }
+
+            protected function getHashedPassword(string $username): string|false
+            {
+                return false;
+            }
+        };
+
+        $this->assertNull($strategy->getResult());
     }
 
     #[TestDox('A user cannot be authenticated when a password cannot be found for the username')]
@@ -53,12 +70,12 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
             ->method('validatePassword');
 
         $strategy = new class ($handler) extends AbstractUsernamePasswordAuthenticationStrategy {
-            public function authenticate()
+            public function authenticate(): string|false
             {
                 return $this->doAuthenticate('username', 'password');
             }
 
-            protected function getHashedPassword($username)
+            protected function getHashedPassword(string $username): string|false
             {
                 return false;
             }
@@ -77,12 +94,12 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
             ->willReturn(false);
 
         $strategy = new class ($handler) extends AbstractUsernamePasswordAuthenticationStrategy {
-            public function authenticate()
+            public function authenticate(): string|false
             {
                 return $this->doAuthenticate('username', 'password');
             }
 
-            protected function getHashedPassword($username)
+            protected function getHashedPassword(string $username): string|false
             {
                 return 'password';
             }
@@ -95,7 +112,7 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
     #[TestDox('An outdated hash is passed to the rehash hook after a successful login')]
     public function testAuthenticateRehashesOutdatedHash()
     {
-        $handler = $this->createMock(RehashAwareHandlerInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
         $handler->expects($this->once())
             ->method('validatePassword')
             ->willReturn(true);
@@ -114,7 +131,7 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
     #[TestDox('A current hash is not rehashed')]
     public function testAuthenticateKeepsCurrentHash()
     {
-        $handler = $this->createMock(RehashAwareHandlerInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
         $handler->method('validatePassword')->willReturn(true);
         $handler->method('needsRehash')->willReturn(false);
 
@@ -127,7 +144,7 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
     #[TestDox('A failed login is not rehashed')]
     public function testAuthenticateInvalidPasswordIsNotRehashed()
     {
-        $handler = $this->createMock(RehashAwareHandlerInterface::class);
+        $handler = $this->createMock(HandlerInterface::class);
         $handler->method('validatePassword')->willReturn(false);
         $handler->expects($this->never())
             ->method('needsRehash');
@@ -143,12 +160,12 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
         return new class ($handler) extends AbstractUsernamePasswordAuthenticationStrategy {
             public array $rehashed = [];
 
-            public function authenticate()
+            public function authenticate(): string|false
             {
                 return $this->doAuthenticate('username', 'password');
             }
 
-            protected function getHashedPassword($username)
+            protected function getHashedPassword(string $username): string|false
             {
                 return 'hash';
             }

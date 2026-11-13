@@ -16,7 +16,7 @@ use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
  *
  * @since  1.2.0
  */
-class Argon2iHandler implements RehashAwareHandlerInterface
+class Argon2iHandler implements HandlerInterface
 {
     /**
      * Generate a hash for a plaintext password
@@ -28,7 +28,7 @@ class Argon2iHandler implements RehashAwareHandlerInterface
      *
      * @since   1.2.0
      */
-    public function hashPassword($plaintext, array $options = [])
+    public function hashPassword(string $plaintext, array $options = []): string
     {
         // Use the password extension if able
         if (\defined('PASSWORD_ARGON2I')) {
@@ -53,7 +53,7 @@ class Argon2iHandler implements RehashAwareHandlerInterface
      *
      * @since   1.2.0
      */
-    public static function isSupported()
+    public static function isSupported(): bool
     {
         // Check for native PHP engine support in the password extension
         if (\defined('PASSWORD_ARGON2I')) {
@@ -94,7 +94,7 @@ class Argon2iHandler implements RehashAwareHandlerInterface
      *
      * @since   1.2.0
      */
-    public function validatePassword($plaintext, $hashed)
+    public function validatePassword(string $plaintext, string $hashed): bool
     {
         // Use the password extension if able
         if (\defined('PASSWORD_ARGON2I')) {

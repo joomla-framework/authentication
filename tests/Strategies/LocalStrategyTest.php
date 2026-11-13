@@ -13,6 +13,7 @@ use Joomla\Authentication\Password\HandlerInterface;
 use Joomla\Authentication\Strategies\LocalStrategy;
 use Joomla\Input\Input;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +51,7 @@ class LocalStrategyTest extends TestCase
      */
     public function testValidPassword()
     {
-        $this->input->expects($this->exactly(2))
+        $this->input->expects($this->exactly(3))
             ->method('get')
             ->willReturnArgument(0);
 
@@ -74,7 +75,7 @@ class LocalStrategyTest extends TestCase
      */
     public function testInvalidPassword()
     {
-        $this->input->expects($this->exactly(2))
+        $this->input->expects($this->exactly(3))
             ->method('get')
             ->willReturnArgument(0);
 
@@ -121,7 +122,7 @@ class LocalStrategyTest extends TestCase
      */
     public function testUserNotExist()
     {
-        $this->input->expects($this->exactly(2))
+        $this->input->expects($this->exactly(3))
             ->method('get')
             ->willReturnArgument(0);
 
@@ -138,4 +139,49 @@ class LocalStrategyTest extends TestCase
 
         $this->assertEquals(Authentication::NO_SUCH_USER, $localStrategy->getResult());
     }
+
+    /**
+     * Data provider for credentials that must be rejected without a lookup.
+     *
+     * @return  \Generator
+     */
+    public static function rejectedCredentialsProvider(): \Generator
+    {
+        yield 'password is an array' => [['username' => 'bob', 'password' => ['secret']]];
+        yield 'username is an array' => [['username' => ['bob'], 'password' => 'secret']];
+        yield 'username changed by the username filter' => [['username' => 'b<o>b', 'password' => 'secret']];
+        yield 'username with a control character' => [['username' => "bob\n", 'password' => 'secret']];
+    }
+
+    /**
+     * Tests the authenticate method rejects malformed credentials instead of erroring or rewriting them.
+     */
+    #[DataProvider('rejectedCredentialsProvider')]
+    public function testRejectedCredentials(array $data)
+    {
+        $this->passwordHandler->expects($this->never())
+            ->method('validatePassword');
+
+        $localStrategy = new LocalStrategy(new Input($data), ['bob' => 'hash'], $this->passwordHandler);
+
+        $this->assertFalse($localStrategy->authenticate());
+        $this->assertSame(Authentication::INVALID_CREDENTIALS, $localStrategy->getResult());
+    }
+
+    /**
+     * Tests the authenticate method accepts the username and password "0".
+     */
+    public function testZeroCredentials()
+    {
+        $this->passwordHandler->expects($this->once())
+            ->method('validatePassword')
+            ->with('0', 'hash')
+            ->willReturn(true);
+
+        $localStrategy = new LocalStrategy(new Input(['username' => '0', 'password' => '0']), ['0' => 'hash'], $this->passwordHandler);
+
+        $this->assertSame('0', $localStrategy->authenticate());
+        $this->assertSame(Authentication::SUCCESS, $localStrategy->getResult());
+    }
+
 }

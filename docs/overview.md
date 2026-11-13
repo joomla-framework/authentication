@@ -145,4 +145,11 @@ database raises a `SodiumException` instead of failing the attempt.
 blocked or unactivated accounts authenticate like any other. Check that after `authenticate()`
 returns.
 
+**How `LocalStrategy` and `DatabaseStrategy` read the credentials.** Both fields are read
+unfiltered from the `username` and `password` input values. A missing or empty value sets
+`Authentication::NO_CREDENTIALS`; `"0"` is a valid username and password. An array, or a username
+that the `username` input filter would change (it contains `<`, `>`, `"`, `'`, `%`, `&` or a
+control character), sets `Authentication::INVALID_CREDENTIALS` without looking the user up — the
+name is rejected, not rewritten into a different one.
+
 **`LocalStrategy` is for tests.** It holds the credential map in memory as plain values.

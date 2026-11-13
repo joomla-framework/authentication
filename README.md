@@ -1,4 +1,4 @@
-# The Authentication Package [![Build Status](https://github.com/joomla-framework/authentication/actions/workflows/ci.yml/badge.svg?branch=3.x-dev)](https://github.com/joomla-framework/authentication)
+# The Authentication Package [![Build Status](https://github.com/joomla-framework/authentication/actions/workflows/ci.yml/badge.svg?branch=4.x-dev)](https://github.com/joomla-framework/authentication)
 
 [![Latest Stable Version](https://poser.pugx.org/joomla/authentication/v/stable)](https://packagist.org/packages/joomla/authentication)
 [![Total Downloads](https://poser.pugx.org/joomla/authentication/downloads)](https://packagist.org/packages/joomla/authentication)

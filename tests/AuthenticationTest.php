@@ -129,4 +129,46 @@ class AuthenticationTest extends TestCase
             $this->object->getResults()
         );
     }
+
+    /**
+     * Tests that the results only describe the last authentication attempt.
+     */
+    public function testGetResultsAreResetOnEachAttempt()
+    {
+        $strategyA = $this->createMock(AuthenticationStrategyInterface::class);
+        $strategyA->method('authenticate')->willReturn(false);
+        $strategyA->method('getResult')->willReturn(Authentication::NO_SUCH_USER);
+
+        $strategyB = $this->createMock(AuthenticationStrategyInterface::class);
+        $strategyB->method('authenticate')->willReturn(false);
+        $strategyB->method('getResult')->willReturn(Authentication::NO_CREDENTIALS);
+
+        $this->object->addStrategy('a', $strategyA);
+        $this->object->addStrategy('b', $strategyB);
+
+        $this->object->authenticate();
+        $this->object->authenticate(['a']);
+
+        $this->assertSame(['a' => Authentication::NO_SUCH_USER], $this->object->getResults());
+    }
+
+    /**
+     * Tests that strategies after a successful one are not tried and have no result.
+     */
+    public function testGetResultsStopAtTheFirstSuccess()
+    {
+        $strategyA = $this->createMock(AuthenticationStrategyInterface::class);
+        $strategyA->method('authenticate')->willReturn('user');
+        $strategyA->method('getResult')->willReturn(Authentication::SUCCESS);
+
+        $strategyB = $this->createMock(AuthenticationStrategyInterface::class);
+        $strategyB->expects($this->never())->method('authenticate');
+
+        $this->object->addStrategy('a', $strategyA);
+        $this->object->addStrategy('b', $strategyB);
+
+        $this->assertSame('user', $this->object->authenticate());
+        $this->assertSame(['a' => Authentication::SUCCESS], $this->object->getResults());
+    }
+
 }

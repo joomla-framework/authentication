@@ -63,11 +63,22 @@ class LocalStrategy extends AbstractUsernamePasswordAuthenticationStrategy
      */
     public function authenticate()
     {
-        $username = $this->input->get('username', false, 'username');
+        $username = $this->input->get('username', false, 'raw');
         $password = $this->input->get('password', false, 'raw');
 
-        if (!$username || !$password) {
+        if ($username === false || $username === '' || $password === false || $password === '') {
             $this->status = Authentication::NO_CREDENTIALS;
+
+            return false;
+        }
+
+        // Reject arrays, and usernames the username filter would change instead of looking up the changed name
+        if (
+            !\is_string($username)
+            || !\is_string($password)
+            || $username !== $this->input->get('username', false, 'username')
+        ) {
+            $this->status = Authentication::INVALID_CREDENTIALS;
 
             return false;
         }

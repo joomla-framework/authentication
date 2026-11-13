@@ -16,7 +16,7 @@ use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
  *
  * @since  1.3.0
  */
-class Argon2idHandler implements HandlerInterface
+class Argon2idHandler implements RehashAwareHandlerInterface
 {
     /**
      * Generate a hash for a plaintext password
@@ -54,6 +54,26 @@ class Argon2idHandler implements HandlerInterface
         }
 
         return false;
+    }
+
+    /**
+     * Check whether a hash was not created with this handler's algorithm and options and should be replaced
+     *
+     * @param   string  $hash     The password hash to check
+     * @param   array   $options  The options a new hash would be created with
+     *
+     * @return  boolean
+     *
+     * @since   __DEPLOY_VERSION__
+     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
+     */
+    public function needsRehash(string $hash, array $options = []): bool
+    {
+        if (!self::isSupported()) {
+            throw new UnsupportedPasswordHandlerException('Argon2id algorithm is not supported.');
+        }
+
+        return password_needs_rehash($hash, \PASSWORD_ARGON2ID, $options);
     }
 
     /**

@@ -9,12 +9,14 @@
 
 namespace Joomla\Authentication\Password;
 
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
+
 /**
  * Password handler for Argon2i hashed passwords
  *
  * @since  1.2.0
  */
-class Argon2iHandler implements HandlerInterface
+class Argon2iHandler implements RehashAwareHandlerInterface
 {
     /**
      * Generate a hash for a plaintext password
@@ -60,6 +62,26 @@ class Argon2iHandler implements HandlerInterface
 
         // Check for support from the (lib)sodium extension
         return \function_exists('sodium_crypto_pwhash_str');
+    }
+
+    /**
+     * Check whether a hash was not created with this handler's algorithm and options and should be replaced
+     *
+     * @param   string  $hash     The password hash to check
+     * @param   array   $options  The options a new hash would be created with
+     *
+     * @return  boolean
+     *
+     * @since   __DEPLOY_VERSION__
+     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
+     */
+    public function needsRehash(string $hash, array $options = []): bool
+    {
+        if (!\defined('PASSWORD_ARGON2I')) {
+            throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
+        }
+
+        return password_needs_rehash($hash, \PASSWORD_ARGON2I, $options);
     }
 
     /**

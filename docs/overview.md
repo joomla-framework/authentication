@@ -122,15 +122,28 @@ protected function doAuthenticate($username, $password)
 **There is no brute-force protection.** No attempt counter, no lockout, no delay. Add rate
 limiting around `authenticate()`.
 
-**Hashes are never upgraded.** `HandlerInterface` has no `needsRehash()`, so a password hashed
-years ago keeps its original cost even after you raise it. A successful login is the only moment
-the plaintext is available — do the rehash there yourself:
+**Hashes are upgraded only if you store them.** The bundled handlers implement
+`Password\RehashAwareHandlerInterface`, whose `needsRehash(string $hash, array $options = []): bool`
+reports whether a hash was made with another algorithm or other options than the handler would use
+(it wraps `password_needs_rehash()`). After a successful login with such a hash,
+`AbstractUsernamePasswordAuthenticationStrategy` calls its protected
+`rehashPassword(string $username, string $password): void` hook — a successful login is the only
+moment the plaintext is available. The default implementation does nothing, because neither
+bundled strategy can write to its credential store; override it to save a new hash:
 
 ```php
-if ($username !== false && password_needs_rehash($storedHash, PASSWORD_BCRYPT, ['cost' => 12])) {
-    $users->updatePassword($username, $handler->hashPassword($password, ['cost' => 12]));
+class MyDatabaseStrategy extends DatabaseStrategy
+{
+    protected function rehashPassword(string $username, string $password): void
+    {
+        $this->users->updatePassword($username, $this->passwordHandler->hashPassword($password));
+    }
 }
 ```
+
+The strategy calls `needsRehash()` without options, so it compares against PHP's defaults for the
+algorithm. If you hash with explicit options (for example `['cost' => 12]`), use a handler subclass
+whose `hashPassword()` and `needsRehash()` both apply them.
 
 **`Argon2iHandler` produces Argon2id in the fallback path.** When `PASSWORD_ARGON2I` is undefined
 it calls `sodium_crypto_pwhash_str()`, which emits an `$argon2id$` hash. The class name then does

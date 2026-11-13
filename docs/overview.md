@@ -132,14 +132,13 @@ if ($username !== false && password_needs_rehash($storedHash, PASSWORD_BCRYPT, [
 }
 ```
 
-**`Argon2iHandler` produces Argon2id in the fallback path.** When `PASSWORD_ARGON2I` is undefined
-it calls `sodium_crypto_pwhash_str()`, which emits an `$argon2id$` hash. The class name then does
-not describe the output. It also ignores `$options` on that path and always uses the INTERACTIVE
-limits.
-
-**A malformed hash crashes the login.** `Argon2iHandler::validatePassword()` calls
-`sodium_crypto_pwhash_str_verify()` without a `try`/`catch`, so a truncated or foreign hash in the
-database raises a `SodiumException` instead of failing the attempt.
+**A handler verifies any hash PHP knows, not only its own algorithm.** `validatePassword()` is
+`password_verify()`, which reads the algorithm from the hash, so `BCryptHandler` accepts an Argon2id
+hash and the other way round. This is what allows switching handlers without resetting passwords.
+If you need to pin the algorithm, check `password_get_info($hash)['algo']` before validating.
+`Argon2iHandler` and `Argon2idHandler` need PHP built with Argon2 support (libargon2 or
+ext-sodium); `isSupported()` returns whether `PASSWORD_ARGON2I` / `PASSWORD_ARGON2ID` is defined,
+and hashing or validating without it throws an `UnsupportedPasswordHandlerException`.
 
 **`DatabaseStrategy` ignores account state.** The query selects the password column only, so
 blocked or unactivated accounts authenticate like any other. Check that after `authenticate()`

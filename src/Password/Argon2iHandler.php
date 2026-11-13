@@ -9,6 +9,8 @@
 
 namespace Joomla\Authentication\Password;
 
+use Joomla\Authentication\Exception\UnsupportedPasswordHandlerException;
+
 /**
  * Password handler for Argon2i hashed passwords
  *
@@ -25,23 +27,15 @@ class Argon2iHandler implements HandlerInterface
      * @return  string
      *
      * @since   1.2.0
+     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
      */
     public function hashPassword($plaintext, array $options = [])
     {
-        // Use the password extension if able
-        if (\defined('PASSWORD_ARGON2I')) {
+        if (self::isSupported()) {
             return password_hash($plaintext, \PASSWORD_ARGON2I, $options);
         }
 
-        $hash = sodium_crypto_pwhash_str(
-            $plaintext,
-            SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE,
-            SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE
-        );
-
-        sodium_memzero($plaintext);
-
-        return $hash;
+        throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
     }
 
     /**
@@ -53,13 +47,8 @@ class Argon2iHandler implements HandlerInterface
      */
     public static function isSupported()
     {
-        // Check for native PHP engine support in the password extension
-        if (\defined('PASSWORD_ARGON2I')) {
-            return true;
-        }
-
-        // Check for support from the (lib)sodium extension
-        return \function_exists('sodium_crypto_pwhash_str');
+        // PHP defines the constant when it supports Argon2i, through libargon2 or ext-sodium
+        return \defined('PASSWORD_ARGON2I');
     }
 
     /**
@@ -71,17 +60,14 @@ class Argon2iHandler implements HandlerInterface
      * @return  boolean
      *
      * @since   1.2.0
+     * @throws  UnsupportedPasswordHandlerException if the password handler is not supported
      */
     public function validatePassword($plaintext, $hashed)
     {
-        // Use the password extension if able
-        if (\defined('PASSWORD_ARGON2I')) {
+        if (self::isSupported()) {
             return password_verify($plaintext, $hashed);
         }
 
-        $valid = sodium_crypto_pwhash_str_verify($hashed, $plaintext);
-        sodium_memzero($plaintext);
-
-        return $valid;
+        throw new UnsupportedPasswordHandlerException('Argon2i algorithm is not supported.');
     }
 }

@@ -25,4 +25,11 @@ class BCryptHandlerTest extends TestCase
         $hash    = $handler->hashPassword('password', ['cost' => 4]);
         $this->assertTrue($handler->validatePassword('password', $hash), 'The hashed password was not validated.');
     }
+
+    #[TestDox('The handler is always supported')]
+    public function testIsSupported()
+    {
+        $this->assertTrue(BCryptHandler::isSupported());
+    }
+
 }

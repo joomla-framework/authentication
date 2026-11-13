@@ -104,20 +104,13 @@ constants).
 `Authentication::NO_SUCH_USER` from `Authentication::INVALID_CREDENTIALS`. Log the distinction,
 but show the user one message — otherwise the endpoint confirms which usernames exist.
 
-**An unknown user is rejected faster than a wrong password.** When `getHashedPassword()` returns
-`false`, the strategy returns before any hash is verified, so no bcrypt or Argon2 work happens.
-The difference is measurable over the network and enumerates usernames even when the status is
-hidden. Verify against a dummy hash before rejecting:
-
-```php
-protected function doAuthenticate($username, $password)
-{
-    $hash = $this->getHashedPassword($username) ?: self::DUMMY_HASH;
-
-    $valid = $this->verifyPassword($username, $password, $hash);
-    // … then decide, using the same code path either way
-}
-```
+**An unknown user costs as much time as a wrong password.** When `getHashedPassword()` returns
+`false`, `doAuthenticate()` still hashes the submitted password with the password handler before
+it reports `Authentication::NO_SUCH_USER`, so the response time does not reveal whether the
+username exists. This holds as long as the stored hashes use the handler's default options (a higher
+bcrypt cost makes a real verification slower again). A strategy that overrides `doAuthenticate()`
+or `verifyPassword()` has to keep both paths equally expensive
+itself.
 
 **There is no brute-force protection.** No attempt counter, no lockout, no delay. Add rate
 limiting around `authenticate()`.

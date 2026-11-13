@@ -48,6 +48,9 @@ class AbstractUsernamePasswordAuthenticationStrategyTest extends TestCase
     public function testAuthenticateNoUser()
     {
         $handler = $this->createMock(HandlerInterface::class);
+        $handler->expects($this->once())
+            ->method('hashPassword')
+            ->with('password');
         $handler->expects($this->never())
             ->method('validatePassword');
 

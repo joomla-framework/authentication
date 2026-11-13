@@ -62,6 +62,13 @@ abstract class AbstractUsernamePasswordAuthenticationStrategy implements Authent
         $hashedPassword = $this->getHashedPassword($username);
 
         if ($hashedPassword === false) {
+            /*
+             * Spend the same work on an unknown user as on a wrong password, so that the response time does not
+             * reveal whether the username exists. Hashing the submitted password costs as much as verifying it
+             * against a hash made with the handler's settings.
+             */
+            $this->passwordHandler->hashPassword($password);
+
             $this->status = Authentication::NO_SUCH_USER;
 
             return false;
